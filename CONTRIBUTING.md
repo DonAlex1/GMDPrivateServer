@@ -122,8 +122,8 @@ Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com
 
 Unsure where to begin contributing to this project? You can start by looking through these `Beginner` and `Help wanted` issues:
 
-* [Beginner issues][https://github.com/DonAlex0/GMDPrivateServer/labels/Beginner] - Issues which should only require a few lines of code, and a test or two.
-* [Help wanted issues][https://github.com/DonAlex0/GMDPrivateServer/labels/Help%20wanted] - Issues which should be a bit more involved than `Beginner issues`.
+* [Beginner issues](https://github.com/DonAlex0/GMDPrivateServer/labels/Beginner) - Issues which should only require a few lines of code, and a test or two.
+* [Help wanted issues](https://github.com/DonAlex0/GMDPrivateServer/labels/Help%20wanted) - Issues which should be a bit more involved than `Beginner issues`.
 
 Both issue lists are sorted by total number of comments. While not perfect, number of comments is a reasonable proxy for the impact a given change will have.
 
