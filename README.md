@@ -5,6 +5,8 @@ Supported version of Geometry Dash: 2.113 (As of writing this [April 21, 2018]).
 
 Required version of PHP: 5.4+
 
+Need a mail to be used by the server to send emails for register accounts, change usernames, change passwords, activate accounts, etc...
+
 ### Setup
 1) Upload the files on a webserver.
 2) Edit connection.php (config/connection.php) with the requeried information.
