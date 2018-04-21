@@ -32,8 +32,7 @@ This project and everyone participating in it is governed by the [Code of Conduc
 
 We have an official message board with a detailed FAQ and where the community chimes in with helpful advice if you have questions.
 
-* [Discuss, the official Atom and Electron message board](https://discuss.atom.io)
-* [Atom FAQ](https://discuss.atom.io/c/faq)
+* [FAQ](http://robtopgames.pe.hu/faq)
 
 If chat is more your style, you can join the Atom and Electron Slack team:
 
@@ -54,7 +53,7 @@ Before creating bug reports, please check [this list](#before-submitting-a-bug-r
 
 #### Before submitting a bug report
 
-* **Check the [FAQs on the forum](https://discuss.atom.io/c/faq)** for a list of common questions and problems.
+* **Check the [FAQs](http://robtopgames.pe.hu/faq)** for a list of common questions and problems.
 * **Check that you have [the latest version](https://github.com/DonAlex0/GMDPrivateServer)**.
 * **Check if all the steps have been followed at [the setup gudie](https://github.com/DonAlex0/GMDPrivateServer#setup)**.
 * **Perform a [search](https://github.com/DonAlex0/GMDPrivateServer/issues?q=is%3Aopen)** to see if the problem has already been reported. If it has **and the issue is still open**, add a comment to the existing issue instead of opening a new one.
@@ -121,18 +120,18 @@ Both issue lists are sorted by total number of comments. While not perfect, numb
 ### Pull requests
 
 * Fill in [the required template](PULL_REQUEST_TEMPLATE.md)
-* Do not include issue numbers in the pull request title.
+* Do **not** include issue numbers in the pull request title.
 * Include screenshots and animated GIFs in your pull request whenever possible.
-* Document new code.
+* Document **new** code.
 * **Avoid** platform-dependent code.
 
 ## Styleguides
 
 ### Git commit messages
 
-* Use the past tense ("Added feature" not "Add feature").
-* Limit the first line to 72 characters or less.
-* Reference issues and pull requests liberally after the first line.
+* Use the **past** tense ("Added feature" not "Add feature").
+* **Limit the first line to 72 characters or less**.
+* Reference issues and pull requests liberally **after the first line**.
 
 ## Additional notes
 
