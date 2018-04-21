@@ -9,22 +9,22 @@ Need a mail to be used by the server to send emails for register accounts, chang
 
 ### Setup
 1) Upload the files on a webserver.
-2) Edit connection.php (config/connection.php) with the requeried information.
-3) Edit defaults.php (config/defaults.php) with the requeried information.
-4) Edit email.php (config/email.php) with the requeried information.
-5) Edit smtp.php (accounts/Mail/Mail/Mail/smtp.php), lines 125 and 132, with the requeried smtp server information.
-6) Import database.sql into a MySQL/MariaDB database.
+2) Edit [connection.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/config/connection.php) with the requeried information.
+3) Edit [defaults.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/config/defaults.php) with the requeried information.
+4) Edit [email.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/config/email.php) with the requeried information.
+5) Edit [smtp.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/accounts/Mail/Mail/Mail/smtp.php), lines 125 and 132, with the requeried smtp server information.
+6) Import [database.sql](https://github.com/DonAlex0/GMDPrivateServer/blob/master/database.sql) into a MySQL/MariaDB database.
 7) Edit the links in GeometryDash.exe (some are Base64 encoded since 2.1).
 
 ### Credits
-Private Messaging system by someguy28.
+* Private messaging system by someguy28.
 
-Base for account settings by someguy28.
+* Base for account settings by someguy28.
 
-Using this for XOR encryption - https://github.com/sathoro/php-xor-cipher - (incl/lib/XORCipher.php).
+* Using [this](https://github.com/sathoro/php-xor-cipher) for XOR encryption - [XORCipher.php](incl/lib/XORCipher.php).
 
-Using this for cloud save encryption - https://github.com/defuse/php-encryption - (incl/lib/defuse-crypto.phar).
+* Using [this](https://github.com/defuse/php-encryption) for cloud save encryption - [defuse-crypto.phar](incl/lib/defuse-crypto.phar).
 
-Most of the stuff in generateHash.php has been figured out by pavlukivan and Italian APK Downloader, so credits to them.
+* Most of the stuff in [generateHash.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/incl/lib/generateHash.php) has been figured out by pavlukivan and Italian APK Downloader.
 
-Based on Cvolton's one - https://github.com/Cvolton/GMDprivateServer
+* Based on [Cvolton's one](https://github.com/Cvolton/GMDprivateServer)
