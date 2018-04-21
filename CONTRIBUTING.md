@@ -1,10 +1,10 @@
-# Contributing to Atom
+# Contributing to the project
 
 First off all, thanks for taking the time to contribute to the project!
 
 The following is a set of guidelines for contributing to the project. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
-## Table Of Contents
+## Table of contents
 
 * [Code of Conduct](#code-of-conduct)
 
@@ -17,15 +17,13 @@ The following is a set of guidelines for contributing to the project. These are 
   * [Reporting bugs](#reporting-bugs)
   * [Suggesting enhancements](#suggesting-enhancements)
   * [Your first code contribution](#your-first-code-contribution)
-  * [Pull Requests](#pull-requests)
+  * [Pull requests](#pull-requests)
 
 * [Styleguides](#styleguides)
   * [Git commit messages](#git-commit-messages)
-  * [JavaScript styleguide](#javascript-styleguide)
-  * [Documentation Styleguide](#documentation-styleguide)
 
 * [Additional notes](#additional-notes)
-  * [Issues and Pull Requests labels](#issues-and-pull-requests-labels)
+  * [Issues and pull requests labels](#issues-and-pull-requests-labels)
 
 ## Code of Conduct
 
@@ -122,10 +120,10 @@ Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com
 
 ### Your first code contribution
 
-Unsure where to begin contributing to this project? You can start by looking through these `beginner` and `help-wanted` issues:
+Unsure where to begin contributing to this project? You can start by looking through these `Beginner` and `Help wanted` issues:
 
-* [Beginner issues][beginner] - Issues which should only require a few lines of code, and a test or two.
-* [Help wanted issues][help-wanted] - Issues which should be a bit more involved than `beginner` issues.
+* [Beginner issues][https://github.com/DonAlex0/GMDPrivateServer/labels/Beginner] - Issues which should only require a few lines of code, and a test or two.
+* [Help wanted issues][https://github.com/DonAlex0/GMDPrivateServer/labels/Help%20wanted] - Issues which should be a bit more involved than `Beginner issues`.
 
 Both issue lists are sorted by total number of comments. While not perfect, number of comments is a reasonable proxy for the impact a given change will have.
 
@@ -196,124 +194,3 @@ Please open an issue if you have suggestions for new labels.
 | `Under review` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Under%20review] | Pull requests being reviewed by maintainers or project core team. |
 | `Requires changes` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Requires%20changes] | Pull requests which need to be updated based on review comments and then reviewed again. |
 | `Needs testing` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Needs%20testing] | Pull requests which need manual testing. |
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# How to contribute
-
-We are really glad you are reading this, because that means you care about our project and you are taking your time to contribute.
-
-If you have not already, come find us on [Discord](https://discord.gg/WrwvmBd). We want you working on things you are excited about.
-
-Here are some important resources:
-
-  * [Pivotal Tracker](http://pivotaltracker.com/projects/64842) is our day-to-day project management space.
-  * Want to contact us?: Send us an email at [info@robtopgames.pe.hu](mailto:info@robtopgames.pe.hu).
-  * Bugs?: Read given information at [How to report issues](#how-to-report-issues).Report them at the [issues page](https://github.com/DonAlex0/GMDPrivateServer/issues/new) on GitHub.
-  * Changes?: Read given information at [Submitting changes](#submitting-changes).
-  * Dicord: Join our server on [Discord](https://discord.gg/WrwvmBd). We are usually there all the week after 15:00 PM GMT +1.
-
-#### Table Of Contents
-
-* [Code of Conduct](#code-of-conduct)
-
-* [I don't want to read this whole thing, I just have a question!!!](#i-dont-want-to-read-this-whole-thing-i-just-have-a-question)
-
-* [What should I know before I get started?](#what-should-i-know-before-i-get-started)
-  * [Atom and Packages](#atom-and-packages)
-  * [Atom Design Decisions](#design-decisions)
-
-* [How Can I Contribute?](#how-can-i-contribute)
-  * [Reporting Bugs](#reporting-bugs)
-  * [Suggesting Enhancements](#suggesting-enhancements)
-  * [Your First Code Contribution](#your-first-code-contribution)
-  * [Pull Requests](#pull-requests)
-
-* [Styleguides](#styleguides)
-  * [Git Commit Messages](#git-commit-messages)
-  * [JavaScript Styleguide](#javascript-styleguide)
-  * [CoffeeScript Styleguide](#coffeescript-styleguide)
-  * [Specs Styleguide](#specs-styleguide)
-  * [Documentation Styleguide](#documentation-styleguide)
-
-* [Additional Notes](#additional-notes)
-  * [Issue and Pull Request Labels](#issue-and-pull-request-labels)
-
-## Code of Conduct
-
-This project and everyone participating in it is governed by the [Code of Conduct of the project](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [info@robtopgames.pe.hu](mailto:info@robtopgames.pe.hu).
-
-## I just have a question!
-
-> **Note:** Please do not create an issue to ask a question. You will get faster results by using the resources below.
-
-We have an official message board with a detailed FAQ and where the community chimes in with helpful advice if you have questions.
-
-* [Discuss, the official Atom and Electron message board](https://discuss.atom.io)
-* [Atom FAQ](https://discuss.atom.io/c/faq)
-
-If chat is more your style, you can join us on our Discord server:
-
-* [Join our Discord server](https://discord.gg/WrwvmBd)
-    * Use the `#questions` channel for general questions or discussion about our projects.
-    * Use the `#non-specifed` channel to talk with people.
-    * There are many other channels available, just check the channels list.
-
-## Testing
-
-We have a handful of Cucumber features, but most of our testbed consists of RSpec examples. Please write RSpec examples for new code you create.
-
-## Submitting changes
-
-Please send a [GitHub Pull Request to opengovernment](https://github.com/DonAlex0/GMDPrivateServer/pull/new/master) with a clear list of what you have done (read more about [Pull Requests](http://help.github.com/pull-requests/)). Please follow our [coding conventions](#coding-conventions) and make sure all of your commits are atomic (one feature per commit).
-
-Always write a clear log message for your commits. One-line messages are fine for small changes, but bigger changes should look like this:
-
-    $ git commit -m "A brief summary of the commit
-    > 
-    > A paragraph describing what changed and its impact."
-
-## Coding conventions
-
-Start reading our code and you'll get the hang of it. We optimize for readability:
-
-  * We indent using two spaces (soft tabs)
-  * We use HAML for all views
-  * We avoid logic in views, putting HTML generators into helpers
-  * We ALWAYS put spaces after list items and method parameters (`[1, 2, 3]`, not `[1,2,3]`), around operators (`x += 1`, not `x+=1`), and around hash arrows.
-  * This is open source software. Consider the people who will read your code, and make it look nice for them. It's sort of like driving a car: Perhaps you love doing donuts when you're alone, but with passengers the goal is to make the ride as smooth as possible.
-  * So that we can consistently serve images from the CDN, always use image_path or image_tag when referring to images. Never prepend "/images/" when using image_path or image_tag.
-
-
-Thanks,
-Carl Tashian, Participatory Politics Foundation
