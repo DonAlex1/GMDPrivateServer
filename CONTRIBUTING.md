@@ -158,7 +158,7 @@ Please open an issue if you have suggestions for new labels.
 #### Type of issue and issue state
 
 | Label names | Search links | Descriptions |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | `Enhancement` | [Search][https://github.com/DonAlex0/GMDPrivateServer/labels/Enhancement] | Feature requests. |
 | `Bug` | [Search][https://github.com/DonAlex0/GMDPrivateServer/labels/Bug] | Confirmed bugs or reports that are very likely to be bugs. |
 | `Question` | [Search][https://github.com/DonAlex0/GMDPrivateServer/labels/Question] | Questions more than bug reports or feature requests (e.g. how do I do X). |
@@ -175,7 +175,7 @@ Please open an issue if you have suggestions for new labels.
 #### Topic categories
 
 | Label names | Search links | Descriptions |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | `Documentation` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Documentation] | Related to any type of documentation. |
 | `Performance` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Performance] | Related to performance. |
 | `Security` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Security] | Related to security. |
@@ -188,7 +188,7 @@ Please open an issue if you have suggestions for new labels.
 #### Pull requests labels
 
 | Label names | Search links | Descriptions |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | `Work in Progress` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Work%20in%20Progress] | Pull requests which are still being worked on, more changes will follow. |
 | `Needs review` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Needs%20review] | Pull requests which need code review, and approval from maintainers or project core team. |
 | `Under review` | [search][https://github.com/DonAlex0/GMDPrivateServer/labels/Under%20review] | Pull requests being reviewed by maintainers or project core team. |
