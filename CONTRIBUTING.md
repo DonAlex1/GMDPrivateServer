@@ -10,9 +10,6 @@ The following is a set of guidelines for contributing to the project. These are 
 
 * [I just have a question!](#i-just-have-a-question)
 
-* [What should I know before I get started?](#what-should-i-know-before-i-get-started)
-  * [Atom Design Decisions](#design-decisions)
-
 * [How can I contribute?](#how-can-i-contribute)
   * [Reporting bugs](#reporting-bugs)
   * [Suggesting enhancements](#suggesting-enhancements)
@@ -44,12 +41,6 @@ If chat is more your style, you can join the Atom and Electron Slack team:
     * Use the `#questions` channel for general questions or discussion about our projects.
     * Use the `#non-specified` channel to talk with people.
     * There are many other channels available, just check the channels list.
-
-## What should I know before I get started?
-
-### Design Decisions
-
-When we make a significant decision in how we maintain the project and what we can or cannot support, we will document it in the [atom/design-decisions repository](https://github.com/atom/design-decisions). If you have a question around how we do things, check to see if it is documented there. If it is *not* documented there, please open a new topic on [Discuss, the official Atom message board](https://discuss.atom.io) and ask your question.
 
 ## How can I contribute?
 
