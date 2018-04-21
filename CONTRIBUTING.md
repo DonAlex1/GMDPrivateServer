@@ -76,7 +76,7 @@ Explain the problem and include additional details to help maintainers reproduce
 Provide more context by answering these questions:
 
 * **Did the problem start happening recently** (e.g. after updating to a new version) or was this always a problem?
-* If the problem started happening recently, **can you reproduce the problem in an older version?** What is the most recent version in which the problem does not happen? You can download older versions from [the releases page](https://github.com/atom/atom/releases).
+* If the problem started happening recently, **can you reproduce the problem in an older version?** What is the most recent version in which the problem does not happen?
 * **Can you reliably reproduce the issue?** If not, provide details about how often the problem happens and under which conditions it normally happens.
 
 Include details about your configuration and environment:
