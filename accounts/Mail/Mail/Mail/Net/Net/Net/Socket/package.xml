@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.10.3" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Net_Socket</name>
+ <channel>pear.php.net</channel>
+ <summary>Network Socket Interface</summary>
+ <description>Net_Socket is a class interface to TCP sockets.  It provides blocking
+  and non-blocking operation, with different reading and writing modes
+  (byte-wise, block-wise, line-wise and special formats like network
+  byte-order ip addresses).</description>
+ <lead>
+  <name>Chuck Hagenbuch</name>
+  <user>chagenbu</user>
+  <email>chuck@horde.org</email>
+  <active>no</active>
+ </lead>
+ <lead>
+  <name>Stig Bakken</name>
+  <user>ssb</user>
+  <email>stig@php.net</email>
+  <active>no</active>
+ </lead>
+ <lead>
+  <name>Aleksander Machniak</name>
+  <user>alec</user>
+  <email>alec@php.net</email>
+  <active>no</active>
+ </lead>
+ <date>2017-04-13</date>
+ <time>17:15:33</time>
+ <version>
+  <release>1.2.2</release>
+  <api>1.2.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD-2-Clause</license>
+ <notes>
+* Bug #21178: $php_errormsg is deprecated in PHP 7.2
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="f99081ef3a69bcc1faa0d90a9a616788" name="Net/Socket.php" role="php" />
+   <file baseinstalldir="/" md5sum="61a9ed8d1604a739e6997149ea34e701" name="README.md" role="doc" />
+   <file baseinstalldir="/" md5sum="28575b04f4f2014316245d83e27343e1" name="LICENSE" role="doc" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.4.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.10.1</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+</package>
