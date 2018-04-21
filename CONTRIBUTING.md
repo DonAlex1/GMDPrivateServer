@@ -159,7 +159,7 @@ Please open an issue if you have suggestions for new labels.
 
 | Label names | Search links | Descriptions |
 | --- | --- | --- |
-| `Enhancement` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Enhancement() | Feature requests. |
+| `Enhancement` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Enhancement) | Feature requests. |
 | `Bug` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Bug) | Confirmed bugs or reports that are very likely to be bugs. |
 | `Question` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Question) | Questions more than bug reports or feature requests (e.g. how do I do X). |
 | `Feedback` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Feedback) | General feedback more than bug reports or feature requests. |
@@ -176,21 +176,21 @@ Please open an issue if you have suggestions for new labels.
 
 | Label names | Search links | Descriptions |
 | --- | --- | --- |
-| `Documentation` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Documentation) | Related to any type of documentation. |
-| `Performance` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Performance) | Related to performance. |
-| `Security` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Security) | Related to security. |
-| `UI` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/UI) | Related to visual design. |
-| `API` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/API) | Related to public APIs. |
-| `Uncaught exception` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Uncaught%20exception) | Issues about uncaught exceptions. |
-| `Encoding` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Encoding) | Related to character encoding. |
-| `Git` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Git) | Related to Git functionality (e.g. problems with gitignore files or with showing the correct file status). |
+| `Documentation` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Documentation) | Related to any type of documentation. |
+| `Performance` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Performance) | Related to performance. |
+| `Security` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Security) | Related to security. |
+| `UI` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/UI) | Related to visual design. |
+| `API` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/API) | Related to public APIs. |
+| `Uncaught exception` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Uncaught%20exception) | Issues about uncaught exceptions. |
+| `Encoding` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Encoding) | Related to character encoding. |
+| `Git` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Git) | Related to Git functionality (e.g. problems with gitignore files or with showing the correct file status). |
 
 #### Pull requests labels
 
 | Label names | Search links | Descriptions |
 | --- | --- | --- |
-| `Work in Progress` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Work%20in%20Progress) | Pull requests which are still being worked on, more changes will follow. |
-| `Needs review` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Needs%20review) | Pull requests which need code review, and approval from maintainers or project core team. |
-| `Under review` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Under%20review) | Pull requests being reviewed by maintainers or project core team. |
-| `Requires changes` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Requires%20changes) | Pull requests which need to be updated based on review comments and then reviewed again. |
-| `Needs testing` | [search](https://github.com/DonAlex0/GMDPrivateServer/labels/Needs%20testing) | Pull requests which need manual testing. |
+| `Work in Progress` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Work%20in%20Progress) | Pull requests which are still being worked on, more changes will follow. |
+| `Needs review` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Needs%20review) | Pull requests which need code review, and approval from maintainers or project core team. |
+| `Under review` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Under%20review) | Pull requests being reviewed by maintainers or project core team. |
+| `Requires changes` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Requires%20changes) | Pull requests which need to be updated based on review comments and then reviewed again. |
+| `Needs testing` | [Search](https://github.com/DonAlex0/GMDPrivateServer/labels/Needs%20testing) | Pull requests which need manual testing. |
