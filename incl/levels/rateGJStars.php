@@ -31,7 +31,8 @@ if($accountID != "" AND $gjp != ""){
 		if($permState == 2){
 			//Rating
 			$difficulty = $gs->getDiffFromStars($stars);
-			$gs->rateLevel($accountID, $levelID, 0, $difficulty["diff"], $difficulty["auto"], $difficulty["demon"]);
+			$query = $db->prepare("UPDATE levels SET starDemon=:demon, starAuto=:auto, starDifficulty=:diff, rateDate=:now WHERE levelID=:levelID");
+			$query->execute([':demon' => $difficulty["demon"], ':auto' => $difficulty["auto"], ':diff' => $difficulty["diff"], ':levelID'=>$levelID, ':now' => time()]);
 			echo 1;
 		}if($permState == 1){
 			//Checking if banned
