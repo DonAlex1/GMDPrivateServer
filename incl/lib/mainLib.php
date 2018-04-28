@@ -229,6 +229,10 @@ class mainLib {
 				$diff = 50;
 				$demon = 1;
 				break;
+			default:
+				$diffname == "NA";
+				$diff == 0;
+				break;
 		}
 		return array('diff' => $diff, 'auto' => $auto, 'demon' => $demon, 'name' => $diffname);
 	}
