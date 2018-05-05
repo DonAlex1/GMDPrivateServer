@@ -13,8 +13,12 @@ Need a mail to be used by the server to send emails for register accounts, chang
 3) Edit [defaults.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/config/defaults.php) with the requeried information.
 4) Edit [email.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/config/email.php) with the requeried information.
 5) Edit [smtp.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/accounts/Mail/Mail/Mail/smtp.php), lines 125 and 132, with the requeried smtp server information.
-6) Import [database.sql](https://github.com/DonAlex0/GMDPrivateServer/blob/master/database.sql) into a MySQL/MariaDB database.
-7) Edit the links in GeometryDash.exe (some are Base64 encoded since 2.1).
+6) Edit [changePassword.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/changePassword.php) and add the email body.
+7) Edit [changeUsername.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/changeUsername.php) and add the email body.
+8) Edit [lostPassword.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/lostPassword.php) and add the email body.
+9) Edit [registerGJAccount.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/registerGJAccount.php) and add the email body.
+10) Import [database.sql](https://github.com/DonAlex0/GMDPrivateServer/blob/master/database.sql) into a MySQL/MariaDB database.
+11) Edit the links in GeometryDash.exe (some are Base64 encoded since 2.1).
 
 ### Credits
 * Private messaging system by someguy28.
