@@ -91,10 +91,8 @@ if($userName != "" AND $newpass != "" AND $oldpass != ""){
 	//Checking pass
 	$pass = $generatePass->isValidUsrname($userName, $oldpass);
 	if ($pass == 1) {
-		$URL = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-		$URL = dirname($URL);
 		//Sending email
-		$body = "Greetings $userName,\n\nYou have recived this email because you have requested a change of pasword, if you have not requested it you can just ignore this.\nIf you have requested it then you must go to the following link: $URL/dashboard/account/changePassword.php?o=$basePassword&e=$baseEmail&n=$baseNewPassword&u=$baseUsername \n\nIf you have some issue or question you can contact us at any moment at $emailMail.";
+		$body = "";
 		$mail = $gs->sendMail($emailMail, $email, "Change password", $body);
 		if(PEAR::isError($mail)){
 			//Printing error

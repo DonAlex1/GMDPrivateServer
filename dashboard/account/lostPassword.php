@@ -87,10 +87,8 @@ if($userName != "" AND $newpass != ""){
     $query->execute([':userName' => $userName, ':email' => $email]);
     $hash = $query->fetchColumn();
 	$baseHash = base64_encode($hash);
-	$URL = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-	$URL = dirname($URL);
 	//Sending email
-	$body = "Greetings $userName,\n\nYou have recived this email because you have forgotten your password, if you have not requested it you can just ignore this.\nIf you have requested it then you must go to the following link: $URL/dashboard/account/lostPassword.php?h=$baseHash&e=$baseEmail&n=$baseNewPassword&u=$baseUsername \n\nIf you have some issue or question you can contact us at any moment at $emailMail.";
+	$body = "";
 	$mail = $gs->sendMail($emailMail, $email, "Lost password", $body);
 	if(PEAR::isError($mail)){
 		//Printing error

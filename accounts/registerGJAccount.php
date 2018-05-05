@@ -9,8 +9,6 @@ $ep = new exploitPatch();
 //Checking nothing's empty
 if(isset($_POST["userName"]) && $_POST["userName"] != "" && isset($_POST["password"]) && $_POST["password"] != "" && isset($_POST["email"]) && $_POST["email"] != ""){
 	//Getting data
-	$URL = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-	$URL = dirname($URL);
 	$userName = $ep->remove($_POST["userName"]);
 	$password = $ep->remove($_POST["password"]);
 	$email = $ep->remove($_POST["email"]);
@@ -28,7 +26,7 @@ if(isset($_POST["userName"]) && $_POST["userName"] != "" && isset($_POST["passwo
 		$hashpass = password_hash($password, PASSWORD_DEFAULT);
 		$hash = md5(rand(0,1000));
 		$baseHash = base64_encode($hash);
-		$body = "Welcome to this Private Server, $userName!\n\nWe all hope you have a nice time here with us, if you have any issues or some question, please feel free to send an email to info@robtopgames.pe.hu at any moment and we will try to solve it as fast as possible.\n\nTo activate your account please go to the following link: $URL/dashboard/account/activate.php?h=$baseHash&e=$baseEmail, then you will be able to log in with your account both in the game and in the Dashboard here: http://robtopgames.pe.hu/GDServer/dashboard, with this credentials:\n\nUsername: $userName\nPassword: $password";
+		$body = "";
 		$mail = $gs->sendMail($emailMail, $email, "Account activation", $body);
 		if(PEAR::isError($mail)){
 			//Error

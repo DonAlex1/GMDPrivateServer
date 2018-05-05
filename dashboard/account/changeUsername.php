@@ -91,8 +91,6 @@ if($userName != "" AND $newusr != "" AND $password != ""){
 	//Checking pass
 	$pass = $generatePass->isValidUsrname($userName, $password);
 	if ($pass == 1) {
-		$URL = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-		$URL = dirname($URL);
 		//Checking how many times username has been changed
 		$query = $db->prepare("SELECT userNameCount FROM accounts WHERE userName = :userName AND email = :email LIMIT 1");
 		$query->execute([':userName' => $userName, ':email' => $email]);
@@ -127,7 +125,7 @@ if($userName != "" AND $newusr != "" AND $password != ""){
 							<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","account"));
 		}
 		//Sending email
-		$body = "Greetings $userName,\n\nYou have recived this email because you have requested a change of username, if you have not requested it you can just ignore this.\nIf you have requested it then you must go to the following link: $URL/dashboard/account/changeUsername.php?p=$basePassword&e=$baseEmail&n=$baseNewusr&u=$baseUsername \n\nIf you have some issue or question you can contact us at any moment at $emailMail.";
+		$body = "";
 		$mail = $gs->sendMail($emailMail, $email, "Change username", $body);
 		if(PEAR::isError($mail)){
 			//Printing error
