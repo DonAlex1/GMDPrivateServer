@@ -16,7 +16,7 @@ Need a mail to be used by the server to send emails for register accounts, chang
 6) Edit [changePassword.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/changePassword.php) and add the email body.
 7) Edit [changeUsername.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/changeUsername.php) and add the email body.
 8) Edit [lostPassword.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/lostPassword.php) and add the email body.
-9) Edit [registerGJAccount.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/registerGJAccount.php) and add the email body.
+9) Edit [registerGJAccount.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/accounts/registerGJAccount.php) and add the email body.
 10) Import [database.sql](https://github.com/DonAlex0/GMDPrivateServer/blob/master/database.sql) into a MySQL/MariaDB database.
 11) Edit the links in GeometryDash.exe (some are Base64 encoded since 2.1).
 
