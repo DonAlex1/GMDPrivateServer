@@ -12,11 +12,11 @@ Need a mail to be used by the server to send emails for register accounts, chang
 2) Edit [connection.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/config/connection.php) with the requeried information.
 3) Edit [defaults.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/config/defaults.php) with the requeried information.
 4) Edit [email.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/config/email.php) with the requeried information.
-5) Edit [smtp.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/accounts/Mail/Mail/Mail/smtp.php), lines 125 and 132, with the requeried smtp server information.
-6) Edit [changePassword.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/changePassword.php) and add the email body.
-7) Edit [changeUsername.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/changeUsername.php) and add the email body.
-8) Edit [lostPassword.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/lostPassword.php) and add the email body.
-9) Edit [registerGJAccount.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/accounts/registerGJAccount.php) and add the email body.
+5) Edit [smtp.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/accounts/Mail/Mail/Mail/smtp.php) with the requeried smtp server information the lines 125 and 132.
+6) Edit [changePassword.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/changePassword.php) and add the email body at line 95.
+7) Edit [changeUsername.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/changeUsername.php) and add the email body at line 128.
+8) Edit [lostPassword.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/dashboard/account/lostPassword.php) and add the email body at line 91.
+9) Edit [registerGJAccount.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/accounts/registerGJAccount.php) and add the email body at line 29.
 10) Import [database.sql](https://github.com/DonAlex0/GMDPrivateServer/blob/master/database.sql) into a MySQL/MariaDB database.
 11) Edit the links in GeometryDash.exe (some are Base64 encoded since 2.1).
 
