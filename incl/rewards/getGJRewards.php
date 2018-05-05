@@ -23,7 +23,7 @@ $chk = $ep->remove($_POST["chk"]);
 $gjp = $ep->remove($_POST["gjp"]);
 $rewardType = $ep->remove($_POST["rewardType"]);
 $gjpresult = $GJPCheck->check($gjp,$accountID);
-if($gjpresult !== 1 AND $accountID !== 0){
+if($gjpresult != 1 AND $accountID != 0){
 	//Error
 	exit("-1");
 }
