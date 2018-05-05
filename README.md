@@ -31,4 +31,4 @@ Need a mail to be used by the server to send emails for register accounts, chang
 
 * Most of the stuff in [generateHash.php](https://github.com/DonAlex0/GMDPrivateServer/blob/master/incl/lib/generateHash.php) has been figured out by pavlukivan and Italian APK Downloader.
 
-* Based on [Cvolton's one](https://github.com/Cvolton/GMDprivateServer).
+* Based on [Cvolton's Private Server](https://github.com/Cvolton/GMDprivateServer).
