@@ -13,12 +13,12 @@ if($secret != "Wmfd2893gb7"){
 $gauntletstring = "";
 $string = "";
 //Getting gauntlets
-$query = $db->prepare("SELECT * FROM gauntlets WHERE level5 != '0' ORDER BY ID ASC");
+$query = $db->prepare("SELECT * FROM gauntlets WHERE levels != '' ORDER BY ID ASC");
 $query->execute();
 $result = $query->fetchAll();
 foreach($result as &$gauntlet){
 	//Getting gauntlet data
-	$lvls = $gauntlet["level1"].",".$gauntlet["level2"].",".$gauntlet["level3"].",".$gauntlet["level4"].",".$gauntlet["level5"];
+	$lvls = $gauntlet["levels"];
 	$gauntletstring .= "1:".$gauntlet["ID"].":3:".$lvls."|";
 	$string .= $gauntlet["ID"].$lvls;
 }

@@ -40,7 +40,7 @@ if($gameVersion == 20){
 if(!empty($_POST["type"])){
 	$type = $ep->remove($_POST["type"]);
 }else{
-	$type = 0;
+	$type = "-";
 }
 $query = "";
 if(!empty($_POST["len"])){
@@ -60,7 +60,7 @@ if($gameVersion == 0){
 	$params[] = " gameVersion <= '$gameVersion'";
 }
 if(!empty($_POST["featured"]) && $_POST["featured"] == 1){
-	$params[] = "starFeatured = 1";
+	$params[] = "starFeatured = 1 OR starEpic = 1";
 }
 if(!empty($_POST["original"]) && $_POST["original"] == 1){
 	$params[] = "original = 0";
@@ -109,13 +109,14 @@ if(!empty($_POST["noStar"])){
 	$params[] = "starStars = 0";
 }
 if(!empty($_POST["gauntlet"])){
-	$order = false;
+	$order = "starStars ASC";
 	$gauntlet = $ep->remove($_POST["gauntlet"]);
 	$query=$db->prepare("SELECT * FROM gauntlets WHERE ID = :gauntlet");
 	$query->execute([':gauntlet' => $gauntlet]);
 	$actualgauntlet = $query->fetch();
-	$str = $actualgauntlet["level1"].",".$actualgauntlet["level2"].",".$actualgauntlet["level3"].",".$actualgauntlet["level4"].",".$actualgauntlet["level5"];
+	$str = $actualgauntlet["levels"];
 	$params[] = "levelID IN ($str)";
+	unset($type);
 }
 //Difficulty filters
 $diff = $db->quote($diff);
@@ -176,7 +177,7 @@ $len = str_replace("'","", $len);
 if($len != "-"){
 	$params[] = "levelLength IN ($len)";
 }
-//YType detection
+//Type detection
 if(!empty($_POST["str"])){
 	$str = $ep->remove($_POST["str"]);
 	$str = $db->quote($str);
@@ -191,8 +192,8 @@ if(isset($_POST["page"]) && is_numeric($_POST["page"])){
 }
 $lvlpagea = $page*10;
 //Most liked
-if($type == 0 OR $type == 15){
-	$order = "likes";
+if(isset($type) AND $type == 0 OR $type == 15){
+	$order = "likes DESC";
 	if($str != ""){
 		//Checking if is level ID or level name
 		if(is_numeric($str)){
@@ -204,17 +205,17 @@ if($type == 0 OR $type == 15){
 }
 //Downloads
 if($type == 1){
-	$order = "downloads";
+	$order = "downloads DESC";
 }
 //Likes
 if($type == 2){
-	$order = "likes";
+	$order = "likes DESC";
 }
 //Trending
 if($type == 3){
 	$uploadDate = time() - (7 * 24 * 60 * 60);
 	$params[] = "uploadDate > $uploadDate ";
-	$order = "likes";
+	$order = "likes DESC";
 }
 //User levels
 if($type == 5){
@@ -225,13 +226,13 @@ if($type == 5){
 }
 //Featured
 if($type == 6 OR $type == 17){
-	$params[] = "NOT starFeatured = 0";
-	$order = "rateDate DESC,uploadDate";
+	$params[] = "NOT starFeatured = 0 OR NOT starEpic = 0";
+	$order = "rateDate DESC,uploadDate DESC";
 }
 //Hall of Fame
 if($type == 16){
 	$params[] = "NOT starEpic = 0";
-	$order = "rateDate DESC,uploadDate";
+	$order = "rateDate DESC,uploadDate DESC";
 }
 //Magic
 if($type == 7){
@@ -245,7 +246,7 @@ if($type == 10){
 //Awarded
 if($type == 11){
 	$params[] = "NOT starStars = 0";
-	$order = "rateDate DESC,uploadDate";
+	$order = "rateDate DESC,uploadDate DESC";
 }
 //Followed
 if($type == 12){
@@ -268,7 +269,7 @@ if($type == 13){
 	}
 }
 if(empty($order)){
-	$order = "uploadDate";
+	$order = "uploadDate DESC";
 }
 $querybase = "FROM levels";
 if(!empty($params)){
@@ -276,7 +277,7 @@ if(!empty($params)){
 }
 $query = "(SELECT * $querybase ) ";
 if($order){
-	$query .= "ORDER BY $order DESC";
+	$query .= "ORDER BY $order";
 }
 $query .= " LIMIT 10 OFFSET $lvlpagea";
 $countquery = "SELECT count(*) $querybase";
