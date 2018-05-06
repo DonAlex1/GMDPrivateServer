@@ -4,7 +4,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 06-05-2018 a las 14:29:36
+-- Tiempo de generación: 06-05-2018 a las 20:35:40
 -- Versión del servidor: 10.1.24-MariaDB
 -- Versión de PHP: 5.2.17
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `acccomments` (
   `isSpam` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`commentID`),
   KEY `userID` (`userID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=27 ;
 
 -- --------------------------------------------------------
 
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   PRIMARY KEY (`accountID`),
   UNIQUE KEY `userName` (`userName`),
   KEY `isAdmin` (`isAdmin`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=71 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=96 ;
 
 -- --------------------------------------------------------
 
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `actions` (
   `value6` int(11) NOT NULL DEFAULT '0',
   `account` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1036 ;
 
 -- --------------------------------------------------------
 
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `artists` (
   `author` text COLLATE utf8_unicode_ci NOT NULL,
   `YouTube` varchar(69) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
 
 -- --------------------------------------------------------
 
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `person2` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `isSpam` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`commentID`),
   KEY `levelID` (`levelID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=95 ;
 
 -- --------------------------------------------------------
 
@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `dailyfeatures` (
   `timestamp` int(11) NOT NULL,
   `type` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`feaID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=24 ;
 
 -- --------------------------------------------------------
 
@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `friendreqs` (
   `isNew` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`ID`),
   KEY `toAccountID` (`toAccountID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
 
 -- --------------------------------------------------------
 
@@ -251,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `friendships` (
   KEY `person2` (`person2`),
   KEY `isNew1` (`isNew1`),
   KEY `isNew2` (`isNew2`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `gauntlets` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `levels` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -278,12 +278,12 @@ CREATE TABLE IF NOT EXISTS `levels` (
   `levelID` int(11) NOT NULL AUTO_INCREMENT,
   `levelName` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `levelDesc` mediumtext COLLATE utf8_unicode_ci NOT NULL,
-  `levelVersion` int(11) NOT NULL,
+  `levelVersion` int(11) NOT NULL DEFAULT '1',
   `levelLength` int(11) NOT NULL DEFAULT '0',
-  `audioTrack` int(11) NOT NULL,
-  `auto` int(11) NOT NULL,
-  `password` int(11) NOT NULL,
-  `original` int(11) NOT NULL,
+  `audioTrack` int(11) NOT NULL DEFAULT '0',
+  `auto` int(11) NOT NULL DEFAULT '0',
+  `password` int(11) NOT NULL DEFAULT '0',
+  `original` int(11) NOT NULL DEFAULT '0',
   `twoPlayer` int(11) NOT NULL DEFAULT '0',
   `songID` int(11) NOT NULL DEFAULT '0',
   `objects` int(11) NOT NULL DEFAULT '0',
@@ -299,9 +299,10 @@ CREATE TABLE IF NOT EXISTS `levels` (
   `starDemon` int(1) NOT NULL DEFAULT '0',
   `starAuto` varchar(11) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `starStars` int(11) NOT NULL DEFAULT '0',
-  `uploadDate` varchar(1337) COLLATE utf8_unicode_ci NOT NULL,
-  `updateDate` bigint(11) NOT NULL,
+  `uploadDate` int(11) NOT NULL DEFAULT '0',
+  `updateDate` int(11) NOT NULL DEFAULT '0',
   `rateDate` bigint(20) NOT NULL DEFAULT '0',
+  `ratedBy` int(11) NOT NULL DEFAULT '0',
   `starCoins` int(11) NOT NULL DEFAULT '0',
   `starFeatured` int(11) NOT NULL DEFAULT '0',
   `starHall` int(11) NOT NULL DEFAULT '0',
@@ -309,9 +310,9 @@ CREATE TABLE IF NOT EXISTS `levels` (
   `starDemonDiff` int(11) NOT NULL DEFAULT '0',
   `userID` int(11) NOT NULL,
   `extID` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `unlisted` int(11) NOT NULL,
+  `unlisted` int(11) NOT NULL DEFAULT '0',
   `originalReup` int(11) NOT NULL DEFAULT '0' COMMENT 'used for levelReupload.php',
-  `hostname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `hostname` varchar(69) COLLATE utf8_unicode_ci NOT NULL DEFAULT '127.0.0.1',
   `isCPShared` int(11) NOT NULL DEFAULT '0',
   `isDeleted` int(11) NOT NULL DEFAULT '0',
   `isLDM` int(11) NOT NULL DEFAULT '0',
@@ -330,7 +331,7 @@ CREATE TABLE IF NOT EXISTS `levels` (
   KEY `audioTrack` (`audioTrack`),
   KEY `levelLength` (`levelLength`),
   KEY `twoPlayer` (`twoPlayer`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=86 ;
 
 -- --------------------------------------------------------
 
@@ -348,7 +349,7 @@ CREATE TABLE IF NOT EXISTS `levelscores` (
   `coins` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`scoreID`),
   KEY `levelID` (`levelID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=76 ;
 
 -- --------------------------------------------------------
 
@@ -404,7 +405,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `isNew` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`messageID`),
   KEY `toAccountID` (`toAccountID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
 
 -- --------------------------------------------------------
 
@@ -425,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `modactions` (
   `account` int(11) NOT NULL DEFAULT '0',
   `value7` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=297 ;
 
 -- --------------------------------------------------------
 
@@ -437,7 +438,7 @@ CREATE TABLE IF NOT EXISTS `modipperms` (
   `categoryID` int(11) NOT NULL AUTO_INCREMENT,
   `actionFreeCopy` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`categoryID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -452,7 +453,7 @@ CREATE TABLE IF NOT EXISTS `modips` (
   `accountID` int(11) NOT NULL,
   `modipCategory` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -480,7 +481,7 @@ CREATE TABLE IF NOT EXISTS `quests` (
   `reward` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -524,7 +525,7 @@ CREATE TABLE IF NOT EXISTS `roleassign` (
   `roleID` bigint(20) NOT NULL,
   `accountID` bigint(20) NOT NULL,
   PRIMARY KEY (`assignID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -562,7 +563,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
   `commentColor` varchar(11) NOT NULL DEFAULT '255,255,255',
   `modBadgeLevel` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`roleID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -583,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `songs` (
   `reuploadTime` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=794627 ;
 
 -- --------------------------------------------------------
 
@@ -648,7 +649,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `completedLvls` (`completedLvls`),
   KEY `isBanned` (`isBanned`),
   KEY `isCreatorBanned` (`isCreatorBanned`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=40 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

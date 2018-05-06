@@ -31,7 +31,7 @@ if($accountID != "" AND $gjp != ""){
 		if($permState == 2){
 			//Rating
 			$difficulty = $gs->getDiffFromStars($stars);
-			$query = $db->prepare("UPDATE levels SET starDemon=:demon, starAuto=:auto, starDifficulty=:diff, rateDate=:now WHERE levelID=:levelID");
+			$query = $db->prepare("UPDATE levels SET starDemon = :demon, starAuto = :auto, starDifficulty = :diff, rateDate = :now WHERE levelID = :levelID");
 			$query->execute([':demon' => $difficulty["demon"], ':auto' => $difficulty["auto"], ':diff' => $difficulty["diff"], ':levelID'=>$levelID, ':now' => time()]);
 			echo 1;
 		}if($permState == 1){
