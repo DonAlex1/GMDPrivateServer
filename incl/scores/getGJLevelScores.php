@@ -29,11 +29,14 @@ $userID = $gs->getUserID($accountID);
 $query2 = $db->prepare("SELECT percent FROM levelscores WHERE accountID = :accountID AND levelID = :levelID");
 $query2->execute([':accountID' => $accountID, ':levelID' => $levelID]);
 $oldPercent = $query2->fetchColumn();
+$query2 = $db->prepare("SELECT coins FROM levelscores WHERE accountID = :accountID AND levelID = :levelID");
+$query2->execute([':accountID' => $accountID, ':levelID' => $levelID]);
+$oldCoins = $query2->fetchColumn();
 if($query2->rowCount() == 0){
 	$query = $db->prepare("INSERT INTO levelscores (accountID, levelID, percent, uploadDate, coins, attempts)
 	VALUES (:accountID, :levelID, :percent, :uploadDate, :coins, :attempts)");
 }else{
-	if($oldPercent < $percent){
+	if($oldPercent < $percent OR $oldCoins < $coins){
 		$query = $db->prepare("UPDATE levelscores SET percent=:percent, uploadDate=:uploadDate, coins=:coins, attempts=:attempts WHERE accountID=:accountID AND levelID=:levelID");
 	}else{
 		$query = $db->prepare("SELECT count(*) FROM levelscores WHERE percent=:percent AND uploadDate=:uploadDate AND accountID=:accountID AND levelID=:levelID AND coins = :coins AND attempts = :attempts");
@@ -59,15 +62,15 @@ switch($type){
 		$friends = $gs->getFriends($accountID);
 		$friends[] = $accountID;
 		$friends = implode(",",$friends);
-		$query2 = $db->prepare("SELECT * FROM levelscores WHERE levelID = :levelID AND accountID IN ($friends) ORDER BY percent DESC, attempts ASC, coins ASC");
+		$query2 = $db->prepare("SELECT * FROM levelscores WHERE levelID = :levelID AND accountID IN ($friends) ORDER BY percent DESC, coins DESC, attempts ASC");
 		$query2args = [':levelID' => $levelID];
 		break;
 	case 1:
-		$query2 = $db->prepare("SELECT * FROM levelscores WHERE levelID = :levelID ORDER BY percent DESC, attempts ASC, coins ASC");
+		$query2 = $db->prepare("SELECT * FROM levelscores WHERE levelID = :levelID ORDER BY percent DESC, coins DESC, attempts ASC");
 		$query2args = [':levelID' => $levelID];
 		break;
 	case 2:
-		$query2 = $db->prepare("SELECT * FROM levelscores WHERE levelID = :levelID AND uploadDate > :time ORDER BY percent DESC, attempts ASC, coins ASC");
+		$query2 = $db->prepare("SELECT * FROM levelscores WHERE levelID = :levelID AND uploadDate > :time ORDER BY percent DESC, coins DESC, attempts ASC");
 		$query2args = [':levelID' => $levelID, ':time' => time() - 604800];
 		break;
 	default:
