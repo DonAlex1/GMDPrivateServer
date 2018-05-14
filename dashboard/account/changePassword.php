@@ -70,7 +70,7 @@ if(isset($_GET["e"]) && isset($_GET["u"]) && isset($_GET["o"]) && isset($_GET["n
 	}else{
 		//Printing error
 		$errorDesc = $dl->getLocalizedString("changePasswordError-1");
-		exit($dl->printBox('<h1>'.$dl->getLocalizedString("changeUsername")."</h1>
+		exit($dl->printBox('<h1>'.$dl->getLocalizedString("changePassword")."</h1>
 						<p>$errorDesc</p>
 						<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","account"));
 	}
@@ -92,17 +92,55 @@ if($userName != "" AND $newpass != "" AND $oldpass != ""){
 	$pass = $generatePass->isValidUsrname($userName, $oldpass);
 	if ($pass == 1) {
 		//Sending email
-		$body = "";
-		$mail = $gs->sendMail($emailMail, $email, "Change password", $body);
-		if(PEAR::isError($mail)){
-			//Printing error
-			$errorDesc = $dl->getLocalizedString("changePasswordError-3");
-			exit($dl->printBox('<h1>'.$dl->getLocalizedString("changePassword")."</h1>
-							<p>$errorDesc</p>
-							<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","account"));
-		}else{
+		if($emailEnabled == 1){
+			$body = "";
+			$mail = $gs->sendMail($emailMail, $email, "Change password", $body);
+			if(PEAR::isError($mail)){
+				//Printing error
+				$errorDesc = $dl->getLocalizedString("changePasswordError-3");
+				exit($dl->printBox('<h1>'.$dl->getLocalizedString("changePassword")."</h1>
+								<p>$errorDesc</p>
+								<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","account"));
+			}else{
+				$dl->printBox("<h1>".$dl->getLocalizedString("changePassword")."</h1>
+					<p>".$dl->getLocalizedString("emailSended")."</p>","account");
+			}
+		}elseif($emailEnabled == 0){
+			//Checking save encryption
+			if($cloudSaveEncryption == 1){
+				//Updating key
+				$query = $db->prepare("SELECT accountID FROM accounts WHERE userName = :userName AND email = :email LIMIT 1");	
+				$query->execute([':userName' => $userName, ':email' => $email]);
+				$accountID = $query->fetchColumn();
+				$saveData = file_get_contents("../../data/accounts/$accountID");
+				if(file_exists("../../data/accounts/keys/$accountID")){
+					$protected_key_encoded = file_get_contents("../../data/accounts/keys/$accountID");
+					$protected_key = KeyProtectedByPassword::loadFromAsciiSafeString($protected_key_encoded);
+					$user_key = $protected_key->unlockKey($oldpass);
+					try {
+						$saveData = Crypto::decrypt($saveData, $user_key);
+					} catch (Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException $ex) {
+						//Printing error
+						$errorDesc = $dl->getLocalizedString("changePasswordError-2");
+						exit($dl->printBox('<h1>'.$dl->getLocalizedString("changePassword")."</h1>
+										<p>$errorDesc</p>
+										<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","account"));
+					}
+					$protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($newpass);
+					$protected_key_encoded = $protected_key->saveToAsciiSafeString();
+					$user_key = $protected_key->unlockKey($newpass);
+					$saveData = Crypto::encrypt($saveData, $user_key);
+					file_put_contents("../../data/accounts/$accountID",$saveData);
+					file_put_contents("../../data/accounts/keys/$accountID",$protected_key_encoded);
+				}
+			}
+			//Creating pass hash
+			$passhash = password_hash($newpass, PASSWORD_DEFAULT);
+			//Updating password
+			$query = $db->prepare("UPDATE accounts SET password = :password, salt = :salt WHERE userName = :userName AND email = :email");	
+			$query->execute([':password' => $passhash, ':userName' => $userName, ':salt' => $salt, ':email' => $email]);
 			$dl->printBox("<h1>".$dl->getLocalizedString("changePassword")."</h1>
-				<p>".$dl->getLocalizedString("emailSended")."</p>","account");
+			<p>".$dl->getLocalizedString("passwordChanged")."</p>","account");
 		}
 	}else{
 		//Printing error

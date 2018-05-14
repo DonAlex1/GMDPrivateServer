@@ -1,6 +1,7 @@
 <?php
 //Requesting files
 include "../incl/lib/connection.php";
+include "../config/email.php";
 require "../incl/lib/generatePass.php";
 require_once "../incl/lib/exploitPatch.php";
 $ep = new exploitPatch();
@@ -38,12 +39,14 @@ if($pass == 1){
 	//Getting account ID
 	$id = $account["accountID"];
 	//Checking if active
-	$query4 = $db->prepare("SELECT active FROM accounts WHERE accountID = :accID LIMIT 1");
-	$query4->execute([':accID' => $id]);
-	$result3 = $query4->fetchColumn();
-	if($result3 == 0){
-		//Error
-		exit("-1");
+	if($emailEnabled == 1){
+		$query4 = $db->prepare("SELECT active FROM accounts WHERE accountID = :accID LIMIT 1");
+		$query4->execute([':accID' => $id]);
+		$result3 = $query4->fetchColumn();
+		if($result3 == 0){
+			//Error
+			exit("-1");
+		}
 	}
 	//Checking if banned
 	$query3 = $db->prepare("SELECT isBanned FROM accounts WHERE accountID = :accountID");

@@ -3,4 +3,5 @@
     $emailUsername = "";
     $emailPassword = "";
     $emailHost = "";
+    $emailEnabled = 0;
 ?>

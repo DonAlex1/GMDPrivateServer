@@ -100,15 +100,64 @@ if($userName != "" AND $newpass != ""){
 		$dl->printBox("<h1>".$dl->getLocalizedString("lostPassword")."</h1>
 			<p>".$dl->getLocalizedString("emailSended")."</p>","account");
 	}
+}elseif($userName != "" && $newpass != "" && isset($_POST["email"])){
+	$email = $ep->remove($_POST["email"]);
+	//Checking save encryption
+	if($cloudSaveEncryption == 1){
+		//Updating key
+		$query = $db->prepare("SELECT accountID FROM accounts WHERE userName = :userName AND email = :email LIMIT 1");	
+		$query->execute([':userName' => $userName, ':email' => $email]);
+		$accountID = $query->fetchColumn();
+		$saveData = file_get_contents("../../data/accounts/$accountID");
+		if(file_exists("../../data/accounts/keys/$accountID")){
+			$protected_key_encoded = file_get_contents("../../data/accounts/keys/$accountID");
+			$protected_key = KeyProtectedByPassword::loadFromAsciiSafeString($protected_key_encoded);
+			$user_key = $protected_key->unlockKey($oldPassword);
+			try {
+				$saveData = Crypto::decrypt($saveData, $user_key);
+			} catch (Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException $ex) {
+				//Printing error
+				$errorDesc = $dl->getLocalizedString("lostPasswordError-2");
+				exit($dl->printBox('<h1>'.$dl->getLocalizedString("lostPassword")."</h1>
+								<p>$errorDesc</p>
+								<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","account"));
+			}
+			$protected_key = KeyProtectedByPassword::createRandomPasswordProtectedKey($newPassword);
+			$protected_key_encoded = $protected_key->saveToAsciiSafeString();
+			$user_key = $protected_key->unlockKey($newPassword);
+			$saveData = Crypto::encrypt($saveData, $user_key);
+			file_put_contents("../../data/accounts/$accountID",$saveData);
+			file_put_contents("../../data/accounts/keys/$accountID",$protected_key_encoded);
+		}
+	}
+	//Creating pass hash
+	$passhash = password_hash($newpass, PASSWORD_DEFAULT);
+	//Updating password
+	$query = $db->prepare("UPDATE accounts SET password = :password, salt = :salt WHERE userName = :userName AND email = :email");
+	$query->execute([':password' => $passhash, ':userName' => $userName, ':salt' => $salt, ':email' => $email]);
+	$dl->printBox("<h1>".$dl->getLocalizedString("lostPassword")."</h1>
+	<p>".$dl->getLocalizedString("passwordChanged")."</p>","account");
 }else{
-	//Printing page
-	$dl->printBox('<h1>'.$dl->getLocalizedString("lostPassword").'</h1>
-				<form action="" method="post">
-					<div class="form-group">
-						<input type="text" class="form-control" id="changePasswordUsername" name="userName" placeholder="'.$dl->getLocalizedString("changePasswordUserNameFieldPlaceholder").'"><br>
-						<input type="password" class="form-control" id="changeUsernameNewPassword" name="newpassword" placeholder="'.$dl->getLocalizedString("changePasswordNewPasswordFieldPlaceholder").'">
-					</div>
-					<button type="submit" class="btn btn-primary btn-block">'.$dl->getLocalizedString("changeBTN").'</button>
-				</form>',"account");
+	if($emailEnabled == 1){
+		//Printing page
+		$dl->printBox('<h1>'.$dl->getLocalizedString("lostPassword").'</h1>
+					<form action="" method="post">
+						<div class="form-group">
+							<input type="text" class="form-control" id="changePasswordEmail" name="email" placeholder="'.$dl->getLocalizedString("lostPasswordEmailFieldPlaceholder").'"><br>
+							<input type="password" class="form-control" id="changeUsernameNewPassword" name="newpassword" placeholder="'.$dl->getLocalizedString("changePasswordNewPasswordFieldPlaceholder").'">
+						</div>
+						<button type="submit" class="btn btn-primary btn-block">'.$dl->getLocalizedString("changeBTN").'</button>
+					</form>',"account");
+	}elseif($emailEnabled == 0){
+		//Printing page
+		$dl->printBox('<h1>'.$dl->getLocalizedString("lostPassword").'</h1>
+					<form action="" method="post">
+						<div class="form-group">
+							<input type="text" class="form-control" id="changePasswordUsername" name="userName" placeholder="'.$dl->getLocalizedString("changePasswordUserNameFieldPlaceholder").'"><br>
+							<input type="password" class="form-control" id="changeUsernameNewPassword" name="newpassword" placeholder="'.$dl->getLocalizedString("changePasswordNewPasswordFieldPlaceholder").'">
+						</div>
+						<button type="submit" class="btn btn-primary btn-block">'.$dl->getLocalizedString("changeBTN").'</button>
+					</form>',"account");
+	}
 }
 ?>

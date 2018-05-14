@@ -114,6 +114,8 @@
 		$string["linkAccountTargetUserNamePlaceholder"] = "Target username";
 		$string["linkAccountTargetPasswordFieldPlaceholder"] = "Target password";
 		$string["linkAccountTargetURLFieldPlaceholder"] = "Target server";
+	//Lost password
+		$string["lostPasswordEmailFieldPlaceholder"] = "Email";
 /*
 	STATS
 */
