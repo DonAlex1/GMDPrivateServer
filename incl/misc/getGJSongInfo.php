@@ -84,7 +84,7 @@ if($query3->rowCount() == 0) {
 }else{
 	$result4 = $query3->fetch();
 	//Checking if artists is banned
-	$query = $db->prepare("SELECT count(*) FROM bannedartists WHERE authorID = :ID AND authorName = :name LIMIT 1");
+	$query = $db->prepare("SELECT count(*) FROM bannedartists WHERE authorID = :ID AND authorName = :authorName LIMIT 1");
 	$query->execute([':ID' => $result4["authorID"], ':authorName' => $result4["authorName"]]);
 	$result2 = $query->fetchColumn();
 	if($result2 > 0){
