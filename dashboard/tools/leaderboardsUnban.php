@@ -1,21 +1,17 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
 include "../../incl/lib/connection.php";
 require_once "../incl/dashboardLib.php";
-require_once "../../incl/lib/exploitPatch.php";
 require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
+$gs = new mainLib();
 $ep = new exploitPatch();
 $dl = new dashboardLib();
-$gs = new mainLib();
 //Checking permissions
-$perms = $gs->checkPermission($_SESSION["accountID"], "dashboardModTools");
-if(!$perms){
+if(!$gs->checkPermission($_SESSION["accountID"], "dashboardModTools")){
 	//Printing error
 	$errorDesc = $dl->getLocalizedString("errorNoPerm");
 	exit($dl->printBox('<h1>'.$dl->getLocalizedString("errorGeneric")."</h1>
@@ -23,10 +19,9 @@ if(!$perms){
 					<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","mod"));
 }
 //Checking nothing's empty
-if(!empty($_POST["userID"])){
+if(!empty($_POST["userID"]) && !$_POST["userID"]){
 	//Getting data
 	$userID = $ep->remove($_POST["userID"]);
-	$accountID = $_SESSION["accountID"];
 	//Checking if is numeric
 	if(!is_numeric($userID)){
 		//Printing error
@@ -36,9 +31,7 @@ if(!empty($_POST["userID"])){
 						<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","mod"));
 	}
 	//Checking if user has been banned
-	$query = $db->prepare("SELECT isBanned FROM users WHERE userID = :userID LIMIT 1");
-	$query->execute([':userID' => $userID]);
-	if($query->fetchColumn() == 0){
+	if(!$gs->isBanned($userID, "leaderboards")){
 		//Printing error
 		$errorDesc = $dl->getLocalizedString("unbanError-3");
 		exit($dl->printBox('<h1>'.$dl->getLocalizedString("leaderboardUnban")."</h1>
@@ -59,9 +52,6 @@ if(!empty($_POST["userID"])){
 						<p>$errorDesc</p>
 						<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","mod"));
 	}
-	$query = $db->prepare("INSERT INTO modactions  (type, value, value2, timestamp, account) 
-											VALUES ('15',:userID, '1',  :timestamp,:account)");
-	$query->execute([':userID' => $userID, ':timestamp' => time(), ':account' => $accountID]);
 }else{
 	//Printing page
 	$dl->printBox('<h1>'.$dl->getLocalizedString("leaderboardUnban").'</h1>

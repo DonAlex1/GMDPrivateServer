@@ -2,15 +2,16 @@
 //Requesting files
 chdir(dirname(__FILE__));
 include "../lib/connection.php";
-require_once "../lib/exploitPatch.php";
 require_once "../lib/GJPCheck.php";
+require_once "../lib/exploitPatch.php";
 $ep = new exploitPatch();
 $GJPCheck = new GJPCheck();
 //Getting data
 $stars = 0;
 $count = 0;
 $xi = 0;
-$lbstring = "";
+$lbstring;
+$type = $ep->remove($_POST["type"]);
 if(empty($_POST["gameVersion"])){
 	$sign = "< 20 AND gameVersion <> 0";
 }else{
@@ -20,23 +21,14 @@ if(!empty($_POST["accountID"])){
 	$accountID = $ep->remove($_POST["accountID"]);
 	//Checking GJP
 	$gjp = $ep->remove($_POST["gjp"]);
-	$gjpresult = $GJPCheck->check($gjp,$accountID);
-	if($gjpresult != 1){
-		//Error
-		exit("-1");
-	}
+	if(!$GJPCheck->check($gjp, $accountID)) exit("-1");
 }else{
 	$accountID = $ep->remove($_POST["udid"]);
 	//Checking if is numeric
-	if(is_numeric($accountID)){
-		//Error
-		exit("-1");
-	}
+	if(is_numeric($accountID)) exit("-1");
 }
-
-$type = $ep->remove($_POST["type"]);
 //Detecting top type
-if($type == "top" OR $type == "creators" OR $type == "relative"){
+if($type == "top" || $type == "creators" || $type == "relative"){
 	if($type == "top"){
 		$query = "SELECT * FROM users WHERE isBanned = '0' AND gameVersion $sign AND stars > 0 ORDER BY stars DESC LIMIT 100";
 	}
@@ -131,10 +123,7 @@ if($type == "friends"){
 		$lbstring .= "1:".$user["userName"].":2:".$user["userID"].":13:".$user["coins"].":17:".$user["userCoins"].":6:".$xi.":9:".$user["icon"].":10:".$user["color1"].":11:".$user["color2"].":14:".$user["iconType"].":15:".$user["special"].":16:".$extid.":3:".$user["stars"].":8:".round($user["creatorPoints"],0,PHP_ROUND_HALF_DOWN).":4:".$user["demons"].":7:".$extid.":46:".$user["diamonds"]."|";
 	}
 }
-if($lbstring == ""){
-	//Error
-	exit("-1");
-}
+if(!$lbstring) exit("-1");
 //Printing top
 $lbstring = substr($lbstring, 0, -1);
 echo $lbstring;

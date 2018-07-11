@@ -1,37 +1,35 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
-require "../incl/dashboardLib.php";
-$dl = new dashboardLib();
-require "../../incl/lib/mainLib.php";
+include "../../incl/lib/connection.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
 $gs = new mainLib();
-require "../../incl/lib/connection.php";
+$dl = new dashboardLib();
+$ep = new exploitPatch();
 //Checking permissions
 if($gs->checkPermission($_SESSION["accountID"], "dashboardModTools")){
 	//Generating accounts table
-	if(isset($_GET["page"]) AND is_numeric($_GET["page"]) AND $_GET["page"] > 0){
-		$page = ($_GET["page"] - 1) * 10;
-		$actualpage = $_GET["page"];
+	if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
+		$page = ($ep->remove($_GET["page"]) - 1) * 10;
+		$actualPage = $ep->remove($_GET["page"]);
 	}else{
 		$page = 0;
-		$actualpage = 1;
+		$actualPage = 1;
 	}
-	$dailytable = "";
 	//Getting data
 	$query = $db->prepare("SELECT * FROM accounts ORDER BY registerDate DESC LIMIT 10 OFFSET $page");
-	$query->execute([]);
-	$result = $query->fetchAll();
+	$query->execute();
+	$accounts = $query->fetchAll();
 	$query = $db->prepare("SELECT count(*) FROM accounts");
-	$query->execute([]);
-	$acccount = $query->fetchColumn();
-	$x = $acccount - $page;
+	$query->execute();
+	$accCount = $query->fetchColumn();
+	$x = $accCount - $page;
 	//Printing data
-	foreach($result as &$account){
+	foreach($accounts as &$account){
 		//Getting account data
 		$query = $db->prepare("SELECT userID FROM users WHERE extID = :extID LIMIT 1");
 		$query->execute([':extID' => $account["accountID"]]);
@@ -57,8 +55,8 @@ if($gs->checkPermission($_SESSION["accountID"], "dashboardModTools")){
 		echo "</td></tr>";
 	}
 	//Bottom row
-	$pagecount = ceil($acccount / 10);
-	$bottomrow = $dl->generateBottomRow($pagecount, $actualpage);
+	$pageCount = ceil($accCount / 10);
+	$bottomRow = $dl->generateBottomRow($pageCount, $actualPage);
 	//Printing page
 	$dl->printPage('<table class="table table-inverse">
 		<thead>
@@ -76,7 +74,7 @@ if($gs->checkPermission($_SESSION["accountID"], "dashboardModTools")){
 			'.$acctable.'
 		</tbody>
 	</table>'
-	.$bottomrow, true, "mod");
+	.$bottomRow, true, "mod");
 }else{
 	//Printing error
 	$errorDesc = $dl->getLocalizedString("errorNoPerm");

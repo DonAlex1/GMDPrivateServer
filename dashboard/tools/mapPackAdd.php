@@ -1,21 +1,17 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
 include "../../incl/lib/connection.php";
 require_once "../incl/dashboardLib.php";
-require_once "../../incl/lib/exploitPatch.php";
 require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
+$gs = new mainLib();
 $ep = new exploitPatch();
 $dl = new dashboardLib();
-$gs = new mainLib();
 //Checking permissions
-$perms = $gs->checkPermission($_SESSION["accountID"], "dashboardModTools");
-if(!$perms){
+if(!$gs->checkPermission($_SESSION["accountID"], "dashboardModTools")){
 	//Printing error
 	$errorDesc = $dl->getLocalizedString("errorNoPerm");
 	exit($dl->printBox('<h1>'.$dl->getLocalizedString("errorGeneric")."</h1>
@@ -46,9 +42,7 @@ if(!empty($_POST["levels"]) && !empty($_POST["stars"]) && !empty($_POST["name"])
 						<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","mod"));
 	}
 	//Printing data
-	$rgb = hexdec(substr($color,0,2)).
-		",".hexdec(substr($color,2,2)).
-		",".hexdec(substr($color,4,2));
+	$rgb = hexdec(substr($color, 0, 2)).",".hexdec(substr($color, 2, 2)).",".hexdec(substr($color, 4, 2));
 	$lvlsarray = explode(",", $levels);
 	foreach($lvlsarray AS &$level){
 		//Checking if is numeric
@@ -110,12 +104,9 @@ if(!empty($_POST["levels"]) && !empty($_POST["stars"]) && !empty($_POST["name"])
 			break;
 	}
 	//Adding map pack
-	$query = $db->prepare("INSERT INTO mappacks     (name, levels, stars, coins, difficulty, rgbcolors)
+	$query = $db->prepare("INSERT INTO mappacks (name, levels, stars, coins, difficulty, rgbcolors)
 											VALUES (:name,:levels,:stars,:coins,:difficulty,:rgbcolors)");
 	$query->execute([':name' => $packName, ':levels' => $levels, ':stars' => $stars, ':coins' => $coins, ':difficulty' => $diff, ':rgbcolors' => $rgb]);
-	$query = $db->prepare("INSERT INTO modactions  (type, value, timestamp, account, value2, value3, value4, value7) 
-											VALUES ('11',:value,:timestamp,:account,:levels, :stars, :coins, :rgb)");
-	$query->execute([':value' => $packName, ':timestamp' => time(), ':account' => $accountID, ':levels' => $levels, ':stars' => $stars, ':coins' => $coins, ':rgb' => $rgb]);
 	$dl->printBox("<h1>".$dl->getLocalizedString("packAdd")."</h1>
 					<p>".sprintf($dl->getLocalizedString("packAdded"), $packName)."</p>
 					<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("songAddAnotherBTN")."</a>","mod");

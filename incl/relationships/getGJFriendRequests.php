@@ -24,8 +24,7 @@ $accountID = $ep->remove($_POST["accountID"]);
 $page = $ep->remove($_POST["page"]);
 //Checking GJP
 $gjp = $ep->remove($_POST["gjp"]);
-$gjpresult = $GJPCheck->check($gjp,$accountID);
-if($gjpresult != 1){
+if(!$GJPCheck->check($gjp,$accountID)){
 	//Error
 	exit("-1");
 }

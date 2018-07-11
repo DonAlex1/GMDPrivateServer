@@ -6,28 +6,23 @@ require_once "../lib/exploitPatch.php";
 $ep = new exploitPatch();
 //Getting data
 $page = $ep->remove($_POST["page"]);
-$artiststring = "";
-$artpagea = $page*10;
+$artistsString;
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
+$artpagea = $page * 10;
 //Getting artists
-$query = "SELECT * FROM artists ORDER BY author ASC LIMIT 10 OFFSET $artpagea";
-$query = $db->prepare($query);
+$query = $db->prepare("SELECT * FROM artists ORDER BY author ASC LIMIT 20 OFFSET $artpagea");
 $query->execute();
-$result = $query->fetchAll();
-if(count($result) < 1){
-	//Nothing
-	exit("-1");
-}
+$artists = $query->fetchAll();
+if($query->rowCount() == 0) exit("-1");
 //Count
-$countquery = "SELECT count(*) FROM artists";
-$countquery = $db->prepare($countquery);
+$countquery = $db->prepare("SELECT count(*) FROM artists");
 $countquery->execute();
 $artistcount = $countquery->fetchColumn();
-foreach($result as &$artist){
+foreach($artists as &$artist){
 	//Getting artists data
-	$artiststring .= "4:".$artist["author"].":7:".$artist["YouTube"]."|";
+	$artistsString .= "4:".$artist["author"].":7:".$artist["YouTube"]."|";
 }
 //Printing artists
-$artiststring = substr($artiststring, 0, -1);
-echo $artiststring;
-echo "#".$artistcount.":".$artpagea.":20";
+$artistsString = substr($artistsString, 0, -1);
+echo $artistsString."#".$artistcount.":".$artpagea.":20";
 ?>

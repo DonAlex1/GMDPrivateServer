@@ -10,10 +10,9 @@ $gs = new mainLib();
 $GJPCheck = new GJPCheck();
 //Getting data
 $gjp = $ep->remove($_POST["gjp"]);
-$accountID = $ep->remove($_POST["accountID"]);
 $levelID = $ep->remove($_POST["levelID"]);
 $percent = $ep->remove($_POST["percent"]);
-$uploadDate = time();
+$accountID = $ep->remove($_POST["accountID"]);
 if(isset($_POST["s1"])){
 	$attempts = $_POST["s1"] - 8354;
 }else{
@@ -25,29 +24,27 @@ if(isset($_POST["s9"])){
 	$coins = 0;
 }
 //Updating score
-$userID = $gs->getUserID($accountID);
-$query2 = $db->prepare("SELECT percent FROM levelscores WHERE accountID = :accountID AND levelID = :levelID");
-$query2->execute([':accountID' => $accountID, ':levelID' => $levelID]);
-$oldPercent = $query2->fetchColumn();
-$query2 = $db->prepare("SELECT coins FROM levelscores WHERE accountID = :accountID AND levelID = :levelID");
-$query2->execute([':accountID' => $accountID, ':levelID' => $levelID]);
-$oldCoins = $query2->fetchColumn();
-if($query2->rowCount() == 0){
+$oldPercentQuery = $db->prepare("SELECT percent FROM levelscores WHERE accountID = :accountID AND levelID = :levelID");
+$oldPercentQuery->execute([':accountID' => $accountID, ':levelID' => $levelID]);
+$oldPercent = $oldPercentQuery->fetchColumn();
+$oldCoinsQuery = $db->prepare("SELECT coins FROM levelscores WHERE accountID = :accountID AND levelID = :levelID");
+$oldCoinsQuery->execute([':accountID' => $accountID, ':levelID' => $levelID]);
+$oldCoins = $oldCoinsQuery->fetchColumn();
+if($oldPercentQuery->rowCount() == 0 && $percent > 0){
 	$query = $db->prepare("INSERT INTO levelscores (accountID, levelID, percent, uploadDate, coins, attempts)
 	VALUES (:accountID, :levelID, :percent, :uploadDate, :coins, :attempts)");
 }else{
-	if($oldPercent < $percent OR $oldCoins < $coins){
-		$query = $db->prepare("UPDATE levelscores SET percent=:percent, uploadDate=:uploadDate, coins=:coins, attempts=:attempts WHERE accountID=:accountID AND levelID=:levelID");
+	if($oldPercent < $percent || $oldCoins < $coins){
+		$query = $db->prepare("UPDATE levelscores SET percent = :percent, uploadDate = :uploadDate, coins = :coins, attempts = :attempts WHERE accountID = :accountID AND levelID = :levelID");
 	}else{
-		$query = $db->prepare("SELECT count(*) FROM levelscores WHERE percent=:percent AND uploadDate=:uploadDate AND accountID=:accountID AND levelID=:levelID AND coins = :coins AND attempts = :attempts");
+		$query = $db->prepare("SELECT count(*) FROM levelscores WHERE percent = :percent AND uploadDate = :uploadDate AND accountID = :accountID AND levelID = :levelID AND coins = :coins AND attempts = :attempts");
 	}
 }
 //Checking GJP
-$gjpresult = $GJPCheck->check($gjp,$accountID);
-if($gjpresult == 1){
-	$query->execute([':accountID' => $accountID, ':levelID' => $levelID, ':percent' => $percent, ':uploadDate' => $uploadDate, ':coins' => $coins, ':attempts' => $attempts]);
+if($GJPCheck->check($gjp, $accountID)){
+	$query->execute([':accountID' => $accountID, ':levelID' => $levelID, ':percent' => $percent, ':uploadDate' => time(), ':coins' => $coins, ':attempts' => $attempts]);
 	if($percent > 100){
-		$query = $db->prepare("UPDATE users SET isBanned=1 WHERE extID = :accountID");
+		$query = $db->prepare("UPDATE users SET isBanned = 1 WHERE extID = :accountID");
 		$query->execute([':accountID' => $accountID]);
 	}
 }
@@ -61,7 +58,7 @@ switch($type){
 	case 0:
 		$friends = $gs->getFriends($accountID);
 		$friends[] = $accountID;
-		$friends = implode(",",$friends);
+		$friends = implode(",", $friends);
 		$query2 = $db->prepare("SELECT * FROM levelscores WHERE levelID = :levelID AND accountID IN ($friends) ORDER BY percent DESC, coins DESC, attempts ASC");
 		$query2args = [':levelID' => $levelID];
 		break;
@@ -86,8 +83,8 @@ foreach ($result as &$score) {
 	$query2->execute([':extID' => $extID]);
 	$user = $query2->fetchAll();
 	$user = $user[0];
-	$time = $gs->time_elapsed_string(date("Y-m-d H:i:s", $score["uploadDate"]));
-	if($user["isBanned"] == 0){
+	$time = $gs->convertDate(date("Y-m-d H:i:s", $score["uploadDate"]));
+	if(!$user["isBanned"]){
 		$place++;
 		echo "1:".$user["userName"].":2:".$user["userID"].":9:".$user["icon"].":10:".$user["color1"].":11:".$user["color2"].":14:".$user["iconType"].":15:".$user["special"].":16:".$user["extID"].":3:".$score["percent"].":6:".$place.":13:".$score["coins"].":42:".$time."|";
 	}

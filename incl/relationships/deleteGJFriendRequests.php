@@ -21,8 +21,7 @@ if(!empty($_POST["isSender"]) AND $_POST["isSender"] == 1){
 		$query = $db->prepare("DELETE FROM friendreqs WHERE toAccountID=:accountID AND accountID=:targetAccountID LIMIT 1");
 }
 //Checking GJP
-$gjpresult = $GJPCheck->check($gjp,$accountID);
-if($gjpresult == 1){
+if($GJPCheck->check($gjp,$accountID)){
 	$query->execute([':accountID' => $accountID, ':targetAccountID' => $targetAccountID]);
 	echo "1";
 }else{

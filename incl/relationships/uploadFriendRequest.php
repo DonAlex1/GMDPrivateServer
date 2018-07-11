@@ -21,8 +21,7 @@ $query->execute([':accountID' => $accountID, ':toAccountID' => $toAccountID]);
 if($query->fetchColumn() == 0){
 	//Checking GJP
 	$gjp = $ep->remove($_POST["gjp"]);
-	$gjpresult = $GJPCheck->check($gjp,$accountID);
-	if($gjpresult == 1){
+	if($GJPCheck->check($gjp,$accountID)){
 		//Uploading request
 		$query = $db->prepare("INSERT INTO friendreqs (accountID, toAccountID, comment, uploadDate)
 		VALUES (:accountID, :toAccountID, :comment, :uploadDate)");

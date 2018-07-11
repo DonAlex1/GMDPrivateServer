@@ -1,35 +1,34 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
-require "../incl/dashboardLib.php";
-$dl = new dashboardLib();
-require "../../incl/lib/mainLib.php";
+include "../../incl/lib/connection.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
 $gs = new mainLib();
-require "../../incl/lib/connection.php";
+$dl = new dashboardLib();
+$ep = new exploitPatch();
 //Generating levels table
-if(isset($_GET["page"]) AND is_numeric($_GET["page"]) AND $_GET["page"] > 0){
-	$page = ($_GET["page"] - 1) * 10;
-	$actualpage = $_GET["page"];
+if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
+	$page = ($ep->remove($_GET["page"]) - 1) * 10;
+	$actualPage = $ep->remove($_GET["page"]);
 }else{
 	$page = 0;
-	$actualpage = 1;
+	$actualPage = 1;
 }
 $leveltable = "";
 //Getting data
 $query = $db->prepare("SELECT * FROM levels ORDER BY uploadDate DESC LIMIT 10 OFFSET $page");
-$query->execute([]);
-$result = $query->fetchAll();
+$query->execute();
+$levels = $query->fetchAll();
 $query = $db->prepare("SELECT count(*) FROM levels");
-$query->execute([]);
-$levelcount = $query->fetchColumn();
-$x = $levelcount - $page;
+$query->execute();
+$levelCount = $query->fetchColumn();
+$x = $levelCount - $page;
 //Printing data
-foreach($result as &$level){
+foreach($levels as &$level){
 	$leveltable .= '<tr>
 					<th scope="row">'.$x.'</th>
 					<td>'.$level["levelID"].'</th>
@@ -43,8 +42,8 @@ foreach($result as &$level){
 	echo "</td></tr>";
 }
 //Bottom row
-$pagecount = ceil($levelcount / 10);
-$bottomrow = $dl->generateBottomRow($pagecount, $actualpage);
+$pageCount = ceil($levelCount / 10);
+$bottomRow = $dl->generateBottomRow($pageCount, $actualPage);
 //Printing page
 $dl->printPage('<table class="table table-inverse">
 	<thead>
@@ -62,5 +61,5 @@ $dl->printPage('<table class="table table-inverse">
 		'.$leveltable.'
 	</tbody>
 </table>'
-.$bottomrow, true, "browse");
+.$bottomRow, true, "browse");
 ?>

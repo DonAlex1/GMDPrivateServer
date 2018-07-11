@@ -1,29 +1,28 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
-require "../incl/dashboardLib.php";
+include "../../incl/lib/connection.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/exploitPatch.php";
 $dl = new dashboardLib();
-require "../../incl/lib/connection.php";
+$ep = new exploitPatch();
 //Generating users table
-if(isset($_GET["page"]) AND is_numeric($_GET["page"]) AND $_GET["page"] > 0){
-	$page = ($_GET["page"] - 1) * 10;
-	$actualpage = $_GET["page"];
+if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
+	$page = ($ep->remove($_GET["page"]) - 1) * 10;
+	$actualpage = $ep->remove($_GET["page"]);
 }else{
 	$page = 0;
 	$actualpage = 1;
 }
-$usertable = "";
+$usertable;
 //Getting data
 $query = $db->prepare("SELECT * FROM users WHERE isRegistered = '1' AND isBanned = '0' ORDER BY userID DESC LIMIT 10 OFFSET $page");
-$query->execute([]);
+$query->execute();
 $result = $query->fetchAll();
 $query = $db->prepare("SELECT count(*) FROM users WHERE isRegistered = '1' AND isBanned = '0'");
-$query->execute([]);
+$query->execute();
 $usercount = $query->fetchColumn();
 $x = $usercount - $page;
 //Printing data

@@ -7,29 +7,23 @@ require_once "../lib/mainLib.php";
 $ep = new exploitPatch();
 $gs = new mainLib();
 //Getting data
-$secret = $ep->remove($_POST["secret"]);
-if($secret != "Wmfd2893gb7"){
-	//Error
-	exit("-2");
-}
-$binaryVersion = $ep->remove($_POST["binaryVersion"]);
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-2");
+$commentsString;
+$page = $ep->remove($_POST["page"]);
 $gameVersion = $ep->remove($_POST["gameVersion"]);
-$commentstring = "";
-$userstring = "";
-$users = array();
+$binaryVersion = $ep->remove($_POST["binaryVersion"]);
 //Mode
-if(isset($_POST["mode"])){
+if(isset($_POST["mode"]) && is_numeric($_POST["mode"])){
 	$mode = $ep->remove($_POST["mode"]);
 }else{
 	$mode = 0;
 }
-if(isset($_POST["count"]) AND is_numeric($_POST["count"])){
+if(isset($_POST["count"]) && is_numeric($_POST["count"])){
 	$count = $ep->remove($_POST["count"]);
 }else{
 	$count = 10;
 }
-$page = $ep->remove($_POST["page"]);
-$commentpage = $page*$count;
+$commentPage = $page * $count;
 //Order
 if($mode == 0){
 	$modeColumn = "commentID";
@@ -39,58 +33,41 @@ if($mode == 0){
 if(!$_POST["levelID"]){
 	//Getting comments history 
 	$displayLevelID = true;
-	$levelID = $ep->remove($_POST["userID"]);
-	$query = "SELECT * FROM comments WHERE userID = :levelID AND secret = :secret ORDER BY $modeColumn DESC LIMIT $count OFFSET $commentpage";
-	$countquery = "SELECT count(*) FROM comments WHERE userID = :levelID AND secret = :secret";
+	$userID = $ep->remove($_POST["userID"]);
+	$levelID = $db->prepare("SELECT extID FROM users WHERE userID = :userID LIMIT 1");
+	$levelID->execute([':userID' => $userID]);
+	$levelID = $levelID->fetchColumn();
+	$query = "SELECT * FROM comments WHERE accountID = :levelID ORDER BY $modeColumn DESC LIMIT $count OFFSET $commentPage";
+	$countQuery = "SELECT count(*) FROM comments WHERE accountID = :levelID";
 }else{
 	//Getting comments
 	$displayLevelID = false;
 	$levelID = $ep->remove($_POST["levelID"]);
-	$query = "SELECT * FROM comments WHERE levelID = :levelID AND secret = :secret ORDER BY $modeColumn DESC LIMIT $count OFFSET $commentpage";
-	$countquery = "SELECT count(*) FROM comments WHERE levelID = :levelID AND secret = :secret";
+	$query = "SELECT * FROM comments WHERE levelID = :levelID ORDER BY $modeColumn DESC LIMIT $count OFFSET $commentPage";
+	$countQuery = "SELECT count(*) FROM comments WHERE levelID = :levelID";
 }
 //Count
-$countquery = $db->prepare($countquery);
-$countquery->execute([':levelID' => $levelID, ':secret' => "Wmfd2893gb7"]);
-$commentcount = $countquery->fetchColumn();
-if($commentcount == 0){
-	//Nothing
-	exit("-2");
-}
+$countQuery = $db->prepare($countQuery);
+$countQuery->execute([':levelID' => $levelID]);
+$commentCount = $countQuery->fetchColumn();
+if(!$commentCount) exit("-2");
 $query = $db->prepare($query);
-$query->execute([':levelID' => $levelID, ':secret' => "Wmfd2893gb7"]);
+$query->execute([':levelID' => $levelID]);
 $result = $query->fetchAll();
-foreach($result as &$comment1){
-	if($comment1["commentID"]!=""){
+foreach($result as &$comment){
+	if($comment["commentID"]){
 		//Getting comment data
-		$uploadDate = $gs->time_elapsed_string(date("Y-m-d H:i:s", $comment1["timestamp"]));
-		$actualcomment = $comment1["comment"];
-		if($displayLevelID){
-			$commentstring .= "1~".$comment1["levelID"]."~";
-		}
-		$commentstring .= "2~".$actualcomment."~3~".$comment1["userID"]."~4~".$comment1["likes"]."~5~0~7~".$comment1["isSpam"]."~9~".$uploadDate."~6~".$comment1["commentID"]."~10~".$comment1["percent"];
-		$query12 = $db->prepare("SELECT userID, userName, icon, color1, color2, iconType, special, extID FROM users WHERE userID = :userID");
-		$query12->execute([':userID' => $comment1["userID"]]);
-		if($query12->rowCount() > 0){
-			$user = $query12->fetchAll()[0];
-			//Checking if is numeric
-			if(is_numeric($user["extID"])){
-				$extID = $user["extID"];
-			}else{
-				$extID = 0;
-			}
-			if(!in_array($user["userID"], $users)){
-				$users[] = $user["userID"];
-				$userstring .=  $user["userID"] . ":" . $user["userName"] . ":" . $extID . "|";
-			}
-			$commentstring .= "~11~".$gs->getMaxValuePermission($extID, "modBadgeLevel")."~12~".$gs->getAccountCommentColor($extID).":1~".$user["userName"]."~7~1~9~".$user["icon"]."~10~".$user["color1"]."~11~".$user["color2"]."~14~".$user["iconType"]."~15~".$user["special"]."~16~".$user["extID"];
-			$commentstring .= "|";
-		}
+		$uploadDate = $gs->convertDate(date("Y-m-d H:i:s", $comment["timestamp"]));
+		if($displayLevelID) $commentsString .= "1~".$comment["levelID"]."~";
+		$extID = $comment["accountID"];
+		$query = $db->prepare("SELECT userID, userName, icon, color1, color2, iconType, special FROM users WHERE extID = :accountID LIMIT 1");
+		$query->execute([':accountID' => $extID]);
+		$user = $query->fetchAll()[0];
+		$commentsString .= "2~".$comment["comment"]."~3~".$user["userID"]."~4~".$comment["likes"]."~7~".$comment["isSpam"]."~10~".$comment["percent"]."~9~".$uploadDate."~6~".$comment["commentID"];
+		$commentsString .= "~11~".$gs->getMaxValuePermission($extID, "modBadgeLevel")."~12~".$gs->getAccountCommentColor($extID).":1~".$user["userName"]."~9~".$user["icon"]."~10~".$user["color1"]."~11~".$user["color2"]."~14~".$user["iconType"]."~15~".$user["special"]."~16~".$extID."|";
 	}
 }
 //Printing account comments
-$commentstring = substr($commentstring, 0, -1);
-$userstring = substr($userstring, 0, -1);
-echo $commentstring;
-echo "#".$commentcount.":".$commentpage.":10";
+$commentsString = substr($commentsString, 0, -1);
+echo $commentsString."#".$commentCount.":".$commentPage.":10";
 ?>

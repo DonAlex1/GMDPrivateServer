@@ -7,18 +7,18 @@ require_once "../lib/exploitPatch.php";
 $ep = new exploitPatch();
 $GJPCheck = new GJPCheck();
 //Getting data
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
 $messageID = $ep->remove($_POST["messageID"]);
 $accountID = $ep->remove($_POST["accountID"]);
-//Checking GJP
 $gjp = $ep->remove($_POST["gjp"]);
-$gjpresult = $GJPCheck->check($gjp,$accountID);
-if($gjpresult == 1){
+//Checking GJP
+if($GJPCheck->check($gjp, $accountID)){
 	//Deleting
-	$query = $db->prepare("DELETE FROM messages WHERE messageID=:messageID AND accID=:accountID LIMIT 1");
-	$query->execute([':messageID' => $messageID, ':accountID' => $accountID]);
-	$query = $db->prepare("DELETE FROM messages WHERE messageID=:messageID AND toAccountID=:accountID LIMIT 1");
-	$query->execute([':messageID' => $messageID, ':accountID' => $accountID]);
-	echo "1";
+	$query = $db->prepare("DELETE FROM messages WHERE messageID = :messageID AND accID=:accountID LIMIT 1");
+	$query->execute([':messageID' => $messageID, ':accountID' => $accountID]) or die("-1");
+	$query = $db->prepare("DELETE FROM messages WHERE messageID = :messageID AND toAccountID=:accountID LIMIT 1");
+	$query->execute([':messageID' => $messageID, ':accountID' => $accountID]) or die("-1");
+	echo 1;
 }else{
 	//Failure
 	exit("-1");

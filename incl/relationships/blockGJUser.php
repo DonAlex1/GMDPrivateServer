@@ -13,8 +13,7 @@ if(!empty($_POST["accountID"]) AND !empty($_POST["gjp"]) AND !empty($_POST["targ
 	$targetAccountID = $ep->remove($_POST["targetAccountID"]);
 	//Checking GJP
 	$gjp = $ep->remove($_POST["gjp"]);
-	$gjpresult = $GJPCheck->check($gjp,$accountID);
-	if($gjpresult == 1){
+	if($GJPCheck->check($gjp,$accountID)){
 		//Blocking
 		$query = $db->prepare("INSERT INTO blocks (person1, person2) VALUES (:accountID, :targetAccountID)");
 		$query->execute([':accountID' => $accountID, ':targetAccountID' => $targetAccountID]);

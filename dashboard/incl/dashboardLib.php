@@ -62,13 +62,13 @@ class dashboardLib{
 	public function printNavbar($active){
 		require_once __DIR__."/../../incl/lib/mainLib.php";
 		$gs = new mainLib();
-		$homeActive = "";
-		$accountActive = "";
-		$modActive = "";
-		$reuploadActive = "";
-		$statsActive = "";
-		$cronActive = "";
-		$loginActive = "";
+		$homeActive;
+		$accountActive;
+		$modActive;
+		$reuploadActiv;
+		$statsActive;
+		$cronActive;
+		$loginActive;
 		switch($active){
 			case "home":
 				$homeActive = "active";
@@ -116,7 +116,7 @@ class dashboardLib{
 							<a class="dropdown-item" href="stats/levels.php">'.$this->getLocalizedString("levels").'</a>
 							<a class="dropdown-item" href="stats/gauntletTable.php">'.$this->getLocalizedString("gauntletTable").'</a>
 							<a class="dropdown-item" href="stats/packTable.php">'.$this->getLocalizedString("packTable").'</a>';
-		if(isset($_SESSION["accountID"]) AND $_SESSION["accountID"] != 0){
+		if(isset($_SESSION["accountID"]) && $_SESSION["accountID"]){
 			echo '
 					<li class="nav-item dropdown '.$accountActive.' ">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -178,7 +178,6 @@ class dashboardLib{
 							<a class="dropdown-item" href="stats/dailyTable.php">'.$this->getLocalizedString("dailyTable").'</a>
 							<a class="dropdown-item" href="stats/modActions.php">'.$this->getLocalizedString("modActions").'</a>
 							<a class="dropdown-item" href="stats/rateSuggestions.php">'.$this->getLocalizedString("rateSuggestions").'</a>
-							<a class="dropdown-item" href="stats/top24h.php">'.$this->getLocalizedString("leaderboardTime").'</a>
 						</div>
 					</li>
 				</ul>
@@ -191,7 +190,7 @@ class dashboardLib{
 							<a class="dropdown-item" href="lang/switchLang.php?lang=EN">'.$this->getLocalizedString("english").'</a>
 							<a class="dropdown-item" href="lang/switchLang.php?lang=ES">'.$this->getLocalizedString("spanish").'</a>
 						</div>';
-		if(isset($_SESSION["accountID"]) AND $_SESSION["accountID"] != 0){
+		if(isset($_SESSION["accountID"]) && $_SESSION["accountID"]){
 			$userName = $gs->getAccountName($_SESSION["accountID"]);
 			echo'<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -240,13 +239,13 @@ class dashboardLib{
 	}
 	//Handle language
 	public function handleLangStart(){
-		if(!isset($_COOKIE["lang"]) OR !ctype_alpha($_COOKIE["lang"])){
+		if(!isset($_COOKIE["lang"]) || !ctype_alpha($_COOKIE["lang"])){
 			setcookie("lang", "EN", 2147483647, "/");
 		}
 	}
 	//Get strings
 	public function getLocalizedString($stringName){
-		if(!isset($_COOKIE["lang"]) OR !ctype_alpha($_COOKIE["lang"])){
+		if(!isset($_COOKIE["lang"]) || !ctype_alpha($_COOKIE["lang"])){
 			$lang = "EN";
 		}else{
 			$lang = $_COOKIE["lang"];

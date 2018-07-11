@@ -54,7 +54,7 @@ class generateHash {
 		include dirname(__FILE__)."/connection.php";
 		$hash = "";
 		foreach($lvlsarray as $id){
-			$query=$db->prepare("SELECT ID,stars,coins FROM mappacks WHERE ID = :id");
+			$query=$db->prepare("SELECT ID,stars,coins FROM mapPacks WHERE ID = :id");
 			$query->execute([':id' => $id]);
 			$result2 = $query->fetchAll();
 			$result = $result2[0];

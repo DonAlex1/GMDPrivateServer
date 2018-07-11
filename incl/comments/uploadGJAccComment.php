@@ -2,47 +2,30 @@
 //Requesting files
 chdir(dirname(__FILE__));
 include "../lib/connection.php";
-require_once "../lib/GJPCheck.php";
-require_once "../lib/exploitPatch.php";
 require_once "../lib/mainLib.php";
+require_once "../lib/GJPCheck.php";
 require_once "../misc/commands.php";
+require_once "../lib/exploitPatch.php";
+$gs = new mainLib();
 $cmds = new Commands();
-$mainLib = new mainLib();
 $ep = new exploitPatch();
 $GJPCheck = new GJPCheck();
 //Getting data
 $gjp = $ep->remove($_POST["gjp"]);
-$userName = $ep->remove($_POST["userName"]);
 $comment = $ep->remove($_POST["comment"]);
-$id = $ep->remove($_POST["accountID"]);
-$secret = $ep->remove($_POST["secret"]);
-if($secret != "Wmfd2893gb7"){
-	//Error
-	exit("-1");
-}
-//Getting user ID
-$userID = $mainLib->getUserID($id, $userName);
-$uploadDate = time();
+$username = $ep->remove($_POST["userName"]);
+$accountID = $ep->remove($_POST["accountID"]);
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
 //Checking if banned
-$query3 = $db->prepare("SELECT isCommentBanned FROM users WHERE extID = :accountID");
-$query3->execute([':accountID' => $id]);
-$result2 = $query3->fetchColumn();
-if($result2 == 1){
-	//Banned
-	exit("-10");
-}
+if($gs->isBanned($accountID, "comment")) exit("-10");
 //User check
-if($id != "" AND $comment != "" AND $GJPCheck->check($gjp,$id) == 1){
-	//Decoding
-	$decodecomment = base64_decode($comment);
-	if($cmds->doProfileCommands($id, $decodecomment)){
-		//Command
-		exit("-1");
-	}
+if($accountID != "" && is_numeric($accountID) && $comment != "" && $GJPCheck->check($gjp, $accountID)){
+	//Command
+	if($cmds->doProfileCommands($accountID, base64_decode($comment))) exit("-1");
 	//Commenting
-	$query = $db->prepare("INSERT INTO acccomments (userName, comment, secret, userID, timeStamp)
-										VALUES (:userName, :comment, :secret, :userID, :uploadDate)");
-	$query->execute([':userName' => $userName, ':comment' => $comment, ':secret' => $secret, ':userID' => $userID, ':uploadDate' => $uploadDate]);
+	$query = $db->prepare("INSERT INTO accComments (username, comment, accountID, timestamp)
+										VALUES (:username, :comment, :accountID, :uploadDate)");
+	$query->execute([':username' => $username, ':comment' => $comment, ':accountID' => $accountID, ':uploadDate' => time()]);
 	echo 1;
 }else{
 	//Failure

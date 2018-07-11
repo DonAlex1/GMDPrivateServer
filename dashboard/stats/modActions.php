@@ -6,21 +6,19 @@ if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
 	exit();
 }
 //Requesting files
-require "../../incl/lib/connection.php";
-require "../incl/dashboardLib.php";
-$dl = new dashboardLib();
-require "../../incl/lib/mainLib.php";
+include "../../incl/lib/connection.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
 $gs = new mainLib();
+$dl = new dashboardLib();
+$ep = new exploitPatch();
 //Generating mod table
 $modtable = "";
 $accounts = implode(",",$gs->getAccountsWithPermission("toolModactions"));
-if($accounts == ""){
-	//Printing error
-	$dl->printBox(sprintf($dl->getLocalizedString("errorNoAccWithPerm"), "toolsModactions"));
-	exit();
-}
+if(!$accounts) exit($dl->printBox(sprintf($dl->getLocalizedString("errorNoAccWithPerm"), "toolsModactions")));
 //Getting data
-$query = $db->prepare("SELECT accountID, userName FROM accounts WHERE accountID IN ($accounts) ORDER BY userName ASC");
+$query = $db->prepare("SELECT accountID, username FROM accounts WHERE accountID IN ($accounts) ORDER BY username ASC");
 $query->execute();
 $result = $query->fetchAll();
 $row = 0;
@@ -35,7 +33,13 @@ foreach($result as &$mod){
 	$query = $db->prepare("SELECT count(*) FROM modactions WHERE account = :id AND type = '1'");
 	$query->execute([':id' => $mod["accountID"]]);
 	$lvlcount = $query->fetchColumn();
-	$modtable .= "<tr><th scope='row'>".$row."</th><td>".$mod["userName"]."</td><td>".$actionscount."</td><td>".$lvlcount."</td><td>".$time."</td></tr>";
+	$modtable .= "<tr>
+					<th scope='row'>".$row."</th>
+					<td>".$mod["userName"]."</td>
+					<td>".$actionscount."</td>
+					<td>".$lvlcount."</td>
+					<td>".$time."</td>
+				</tr>";
 }
 //Printing page
 $dl->printPage('<table class="table table-inverse">

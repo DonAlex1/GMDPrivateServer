@@ -6,37 +6,37 @@ require_once "../lib/exploitPatch.php";
 require_once "../lib/mainLib.php";
 $ep = new exploitPatch();
 $gs = new mainLib();
-//Getting data
-$secret = $ep->remove($_POST["secret"]);
-if($secret != "Wmfd2893gb7"){
+//Checking secret
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7"){
 	//Error
 	exit("#0:0:0");
 }
-$commentstring = "";
-$accountid = $ep->remove($_POST["accountID"]);
+//Getting post data
+$commentsString;
 $page = $ep->remove($_POST["page"]);
-$commentpage = $page*10;
-//Getting user ID
-$userID = $gs->getUserID($accountid);
+$accountID = $ep->remove($_POST["accountID"]);
+$commentPage = $page * 10;
 //Getting account comments
-$query = $db->prepare("SELECT * FROM acccomments WHERE userID = :userID AND secret = :secret ORDER BY timeStamp DESC LIMIT 10 OFFSET $commentpage");
-$query->execute([':userID' => $userID, ':secret' => "Wmfd2893gb7"]);
-$result = $query->fetchAll();
+$query = $db->prepare("SELECT * FROM accComments WHERE accountID = :accountID ORDER BY timestamp DESC LIMIT 10 OFFSET $commentPage");
+$query->execute([':accountID' => $accountID]);
+$comments = $query->fetchAll();
+//Counting account comments
 if($query->rowCount() == 0){
-	//Nothing
+	//No account comments
 	exit("#0:0:0");
 }
-$countquery = $db->prepare("SELECT count(*) FROM acccomments WHERE userID = :userID AND secret = :secret");
-$countquery->execute([':userID' => $userID, ':secret' => "Wmfd2893gb7"]);
-$commentcount = $countquery->fetchColumn();
-foreach($result as &$comment1) {
-	if($comment1["commentID"]!=""){
-		$uploadDate = $gs->time_elapsed_string(date("Y-m-d H:i:s", $comment1["timestamp"]));
-		$commentstring .= "2~".$comment1["comment"]."~3~".$comment1["userID"]."~4~".$comment1["likes"]."~5~0~7~".$comment1["isSpam"]."~9~".$uploadDate."~6~".$comment1["commentID"]."|";
+$query = $db->prepare("SELECT count(*) FROM accComments WHERE accountID = :accountID");
+$query->execute([':accountID' => $accountID]);
+$commentCount = $query->fetchColumn();
+//Fetching account comments
+foreach($comments as &$comment) {
+	if($comment["commentID"] != ""){
+		$uploadDate = $gs->convertDate(date("Y-m-d H:i:s", $comment["timestamp"]));
+		$commentsString .= "2~".$comment["comment"]."~4~".$comment["likes"]."~9~".$uploadDate."~6~".$comment["commentID"]."|";
 	}
 }
 //Printing account comments
-$commentstring = substr($commentstring, 0, -1);
-echo $commentstring;
-echo "#".$commentcount.":".$commentpage.":10";
+$commentsString = substr($commentsString, 0, -1);
+echo $commentsString;
+echo "#".$commentCount.":".$commentPage.":10";
 ?>

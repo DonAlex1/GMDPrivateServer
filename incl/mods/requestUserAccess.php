@@ -10,14 +10,14 @@ $gs = new mainLib();
 $GJPCheck = new GJPCheck();
 //Getting data
 $gjp = $ep->remove($_POST["gjp"]);
-$id = $ep->remove($_POST["accountID"]);
+$accountID = $ep->remove($_POST["accountID"]);
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
 //Checking nothing's empty
-if($id != "" AND $gjp != ""){
+if($accountID != "" && $gjp != ""){
 	//Checking GJP
-	$gjpresult = $GJPCheck->check($gjp,$id);
-	if($gjpresult == 1){
+	if($GJPCheck->check($gjp, $accountID)){
 		//Checking moderator status
-		$permState = $gs->getMaxValuePermission($id, "actionRequestMod");
+		$permState = $gs->getMaxValuePermission($accountID, "actionRequestMod");
 		if($permState == 0){
 			//Not moderator
 			exit("-1");

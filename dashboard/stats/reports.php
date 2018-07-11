@@ -1,19 +1,17 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
-require "../../incl/lib/connection.php";
-require "../incl/dashboardLib.php";
-$dl = new dashboardLib();
-require "../../incl/lib/mainLib.php";
+include "../../incl/lib/connection.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
 $gs = new mainLib();
+$dl = new dashboardLib();
+$ep = new exploitPatch();
 //Checking permissions
-$perms = $gs->checkPermission($_SESSION["accountID"], "dashboardModTools");
-if(!$perms){
+if(!$gs->checkPermission($_SESSION["accountID"], "dashboardModTools")){
 	//Printing error
 	$errorDesc = $dl->getLocalizedString("errorNoPerm");
 	exit($dl->printBox('<h1>'.$dl->getLocalizedString("errorGeneric")."</h1>
@@ -21,21 +19,21 @@ if(!$perms){
 					<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","mod"));
 }
 //Generating reports table
-if(isset($_GET["page"]) AND is_numeric($_GET["page"]) AND $_GET["page"] > 0){
-	$page = ($_GET["page"] - 1) * 10;
-	$actualpage = $_GET["page"];
+if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
+	$page = ($ep->remove($_GET["page"]) - 1) * 10;
+	$actualPage = $ep->remove($_GET["page"]);
 }else{
 	$page = 0;
-	$actualpage = 1;
+	$actualPage = 1;
 }
 $array = array();
 //Getting data
 $query = $db->prepare("SELECT levelID FROM reports ORDER BY levelID DESC LIMIT 10 OFFSET $page");
-$query->execute([]);
+$query->execute();
 $result = $query->fetchAll();
 $query = $db->prepare("SELECT count(*) FROM reports");
-$query->execute([]);
-$reportcount = $query->fetchColumn();
+$query->execute();
+$reportCount = $query->fetchColumn();
 foreach($result as &$report){
 	if(!empty($array[$report["levelID"]])){
 		$array[$report["levelID"]]++;
@@ -51,8 +49,8 @@ foreach($array as $id => $count){
 					</tr>';
 }
 //Bottom row
-$pagecount = ceil($reportcount / 10);
-$bottomrow = $dl->generateBottomRow($pagecount, $actualpage);
+$pageCount = ceil($reportCount / 10);
+$bottomRow = $dl->generateBottomRow($pageCount, $actualPage);
 //Printing page
 $dl->printPage('<table class="table table-inverse">
 <thead>
@@ -65,5 +63,5 @@ $dl->printPage('<table class="table table-inverse">
 		'.$reporttable.'
 	</tbody>
 </table>'
-.$bottomrow, true, "mod");
+.$bottomRow, true, "mod");
 ?>

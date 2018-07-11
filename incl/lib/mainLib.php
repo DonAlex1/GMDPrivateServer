@@ -1,5 +1,54 @@
 <?php
 class mainLib {
+	public function isBanned($pattern, $banCase){
+		include __DIR__ . "/connection.php";
+		switch($banCase){
+			case "rate":
+				$query = $db->prepare("SELECT isRatingBanned FROM users WHERE userID = :pattern OR extID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			case "report":
+				$query = $db->prepare("SELECT isReportingBanned FROM users WHERE userID = :pattern OR extID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			case "comment":
+				$query = $db->prepare("SELECT isCommentBanned FROM users WHERE extID = :pattern OR userID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			case "upload":
+				$query = $db->prepare("SELECT isLevelBanned FROM users WHERE userID = :pattern OR extID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			case "creators":
+				$query = $db->prepare("SELECT isCreatorBanned FROM users WHERE userID = :pattern OR extID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			case "leaderboards":
+				$query = $db->prepare("SELECT isBanned FROM users WHERE userID = :pattern OR extID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			case "message":
+				$query = $db->prepare("SELECT isMessageBanned FROM users WHERE extID = :pattern OR userID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			case "like":
+				$query = $db->prepare("SELECT isLikeBanned FROM users WHERE userID = :pattern OR extID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			case "IP":
+				$query = $db->prepare("SELECT hostname FROM bannedIPs WHERE hostname = :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				return $query->rowCount();
+			case "account":
+				$query = $db->prepare("SELECT isBanned FROM accounts WHERE accountID = :pattern OR userID = :pattern OR username LIKE :pattern LIMIT 1");
+				$query->execute([':pattern' => $pattern]);
+				break;
+			default:
+				return false;
+		}
+		return $query->fetchColumn();
+	}
+
 	public function sendMail($from, $to, $subject, $body){
 		include __DIR__ . "/../../config/email.php";
 		require __DIR__ . "/../../accounts/Mail/Mail/Mail.php";
@@ -17,7 +66,7 @@ class mainLib {
 		return $mail;
 	}
 	//Convert time
-	public function time_elapsed_string($datetime, $full = false) {
+	public function convertDate($datetime, $full = false) {
 		$now = new DateTime;
 		$ago = new DateTime($datetime);
 		$diff = $now->diff($ago);
@@ -32,8 +81,8 @@ class mainLib {
 			'd' => 'day',
 			'h' => 'hour',
 			'i' => 'minute',
-			's' => 'second',
-		);
+			's' => 'second');
+
 		foreach ($string as $k => &$v) {
 			if ($diff->$k) {
 				$v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
@@ -156,11 +205,10 @@ class mainLib {
 			default:
 				return "Unknown by DJVI";
 				break;
-			
 		}
 	}
 	//Gets difficulties
-	public function getDifficulty($diff,$auto,$demon) {
+	public function getDifficulty($diff, $auto, $demon) {
 		if($auto != 0){
 			return "Auto";
 		}else if($demon != 0){
@@ -387,15 +435,14 @@ class mainLib {
 		}else{
 			$register = 0;
 		}
-		$query = $db->prepare("SELECT userID FROM users WHERE extID = :id");
-		$query->execute([':id' => $extID]);
+		$query = $db->prepare("SELECT userID FROM users WHERE extID = :extID");
+		$query->execute([':extID' => $extID]);
 		if ($query->rowCount() > 0) {
 			$userID = $query->fetchColumn();
 		} else {
-			$query = $db->prepare("INSERT INTO users (isRegistered, extID, userName, lastPlayed)
-			VALUES (:register, :id, :userName, :uploadDate)");
+			$query = $db->prepare("INSERT INTO users (isRegistered, extID, userName, lastPlayed) VALUES (:register, :extID, :userName, :uploadDate)");
 
-			$query->execute([':id' => $extID, ':register' => $register, ':userName' => $userName, ':uploadDate' => time()]);
+			$query->execute([':extID' => $extID, ':register' => $register, ':userName' => $userName, ':uploadDate' => time()]);
 			$userID = $db->lastInsertId();
 		}
 		return $userID;

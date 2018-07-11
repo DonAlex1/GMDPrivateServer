@@ -1,24 +1,22 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
-require "../../incl/lib/connection.php";
-require "../incl/dashboardLib.php";
-$dl = new dashboardLib();
-require "../../incl/lib/mainLib.php";
-$gs = new mainLib();
 include "../../incl/lib/connection.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
+$gs = new mainLib();
+$dl = new dashboardLib();
+$ep = new exploitPatch();
 //Getting form data
-if(isset($_GET["page"]) AND is_numeric($_GET["page"]) AND $_GET["page"] > 0){
-	$page = ($_GET["page"] - 1) * 10;
-	$actualpage = $_GET["page"];
+if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
+	$page = ($ep->remove($_GET["page"]) - 1) * 10;
+	$actualPage = $ep->remove($_GET["page"]);
 }else{
 	$page = 0;
-	$actualpage = 1;
+	$actualPage = 1;
 }
 //Generating unlisted table
 $table = '<table class="table table-inverse">
@@ -32,10 +30,10 @@ $table = '<table class="table table-inverse">
 			</thead>
 			<tbody>';
 //Getting unlisted level
-$query = $db->prepare("SELECT levelID, levelName, starStars, coins FROM levels WHERE extID=:extID AND unlisted=1 ORDER BY levelID DESC LIMIT 10 OFFSET $page");
+$query = $db->prepare("SELECT levelID, levelName, starStars, coins FROM levels WHERE extID = :extID AND unlisted = 1 ORDER BY levelID DESC LIMIT 10 OFFSET $page");
 $query->execute([":extID" => $_SESSION["accountID"]]);
-$result = $query->fetchAll();
-foreach($result as &$level){
+$levels = $query->fetchAll();
+foreach($levels as &$level){
 	//Getting level data
 	$table .= "<tr>
 				<td>".$level["levelID"]."</td>
@@ -46,11 +44,11 @@ foreach($result as &$level){
 }
 $table .= "</tbody></table>";
 //Getting count
-$query = $db->prepare("SELECT count(*) FROM levels WHERE extID=:extID AND unlisted=1");
+$query = $db->prepare("SELECT count(*) FROM levels WHERE extID = :extID AND unlisted = 1");
 $query->execute([':extID' => $_SESSION["accountID"]]);
-$packcount = $query->fetchColumn();
-$pagecount = ceil($packcount / 10);
+$unlistedCount = $query->fetchColumn();
+$pageCount = ceil($unlistedCount / 10);
 //Bottom row
-$bottomrow = $dl->generateBottomRow($pagecount, $actualpage);
-$dl->printPage($table . $bottomrow, true, "account");
+$bottomRow = $dl->generateBottomRow($pageCount, $actualPage);
+$dl->printPage($table . $bottomRow, true, "account");
 ?>

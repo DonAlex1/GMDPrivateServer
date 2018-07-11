@@ -1,33 +1,32 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
-require "../incl/dashboardLib.php";
-$dl = new dashboardLib();
-require "../../incl/lib/mainLib.php";
+include "../../incl/lib/connection.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
 $gs = new mainLib();
-require "../../incl/lib/connection.php";
+$dl = new dashboardLib();
+$ep = new exploitPatch();
 //Generating suggestions table
-if(isset($_GET["page"]) AND is_numeric($_GET["page"]) AND $_GET["page"] > 0){
-	$page = ($_GET["page"] - 1) * 10;
-	$actualpage = $_GET["page"];
+if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
+	$page = ($ep->remove($_GET["page"]) - 1) * 10;
+	$actualPage = $ep->remove($_GET["page"]);
 }else{
 	$page = 0;
-	$actualpage = 1;
+	$actualPage = 1;
 }
-$ratetable = "";
+$ratetable;
 //Getting data
-$query = $db->prepare("SELECT * FROM ratesuggestions ORDER BY suggestionDate DESC LIMIT 10 OFFSET $page");
-$query->execute([]);
+$query = $db->prepare("SELECT * FROM rateSuggestions ORDER BY suggestionDate DESC LIMIT 10 OFFSET $page");
+$query->execute();
 $result = $query->fetchAll();
-$query = $db->prepare("SELECT count(*) FROM ratesuggestions");
-$query->execute([]);
-$ratecount = $query->fetchColumn();
-$x = $ratecount - $page;
+$query = $db->prepare("SELECT count(*) FROM rateSuggestions");
+$query->execute();
+$rateCount = $query->fetchColumn();
+$x = $rateCount - $page;
 //Printing data
 foreach($result as &$rate){
 	//Getting data
@@ -81,9 +80,9 @@ foreach($result as &$rate){
 			break;
 	}
 	//Checking demon
-	$query3 = $db->prepare("SELECT diff FROM demondiffsuggestions WHERE accountID = :accID");
-	$query3->execute([':accID' => $accountID]);
-	$demon = $query3->fetchColumn();
+	$query = $db->prepare("SELECT diff FROM demonDiffSuggestions WHERE accountID = :accID");
+	$query->execute([':accID' => $accountID]);
+	$demon = $query->fetchColumn();
 	switch($demon){
 		case 1:
 			$demon = $dl->getLocalizedString("Easy");
@@ -137,8 +136,8 @@ foreach($result as &$rate){
 	echo "</td></tr>";
 }
 //Bottom row
-$pagecount = ceil($ratecount / 10);
-$bottomrow = $dl->generateBottomRow($pagecount, $actualpage);
+$pageCount = ceil($rateCount / 10);
+$bottomRow = $dl->generateBottomRow($pageCount, $actualPage);
 //Printing page
 $dl->printPage('<table class="table table-inverse">
 <thead>
@@ -158,5 +157,5 @@ $dl->printPage('<table class="table table-inverse">
 		'.$ratetable.'
 	</tbody>
 </table>'
-.$bottomrow, true, "stats");
+.$bottomRow, true, "stats");
 ?>

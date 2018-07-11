@@ -14,8 +14,7 @@ $query = "DELETE FROM blocks WHERE person1 = :accountID AND person2 = :targetAcc
 $query = $db->prepare($query);
 //Checking GJP
 $gjp = $ep->remove($_POST["gjp"]);
-$gjpresult = $GJPCheck->check($gjp,$accountID);
-if($gjpresult == 1){
+if($GJPCheck->check($gjp,$accountID)){
 	$query->execute([':accountID' => $accountID, ':targetAccountID' => $targetAccountID]);
 	echo "1";
 }else{

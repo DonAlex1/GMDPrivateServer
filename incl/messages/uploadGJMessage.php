@@ -11,42 +11,20 @@ $GJPCheck = new GJPCheck();
 $cmds = new Commands();
 $gs = new mainLib();
 //Getting data
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
 $gjp =  $ep->remove($_POST["gjp"]);
-$gameVersion =  $ep->remove($_POST["gameVersion"]);
-$binaryVersion =  $ep->remove($_POST["binaryVersion"]);
-$secret =  $ep->remove($_POST["secret"]);
-$subject =  $ep->remove($_POST["subject"]);
-$toAccountID =  $ep->remove($_POST["toAccountID"]);
 $body =  $ep->remove($_POST["body"]);
-$accID =  $ep->remove($_POST["accountID"]);
-//Getting username
-$query3 = $db->prepare("SELECT userName FROM users WHERE extID = :accID ORDER BY userName DESC");
-$query3->execute([':accID' => $accID]);
-$userName = $query3->fetchColumn();
+$subject =  $ep->remove($_POST["subject"]);
+$accountID =  $ep->remove($_POST["accountID"]);
+$toAccountID =  $ep->remove($_POST["toAccountID"]);
 //Checking if banned
-$query3 = $db->prepare("SELECT isMessageBanned FROM users WHERE extID = :accountID");
-$query3->execute([':accountID' => $accID]);
-$result2 = $query3->fetchColumn();
-if($result2 == 1){
-	//Banned
-	exit("-1");
-}
-if($cmds->doMessageCommands($accID, $toAccountID, $body)){
-	//Commands
-	exit("-1");
-}
-//Getting account data
-$id = $ep->remove($_POST["accountID"]);
-$register = 1;
-$userID = $gs->getUserID($id);
-$uploadDate = time();
-//Uploading message
-$query = $db->prepare("INSERT INTO messages (subject, body, accID, userID, userName, toAccountID, secret, timestamp)
-VALUES (:subject, :body, :accID, :userID, :userName, :toAccountID, :secret, :uploadDate)");
+if($gs->isBanned($accountID, "message")) exit("-1");
 //Checking GJP
-$gjpresult = $GJPCheck->check($gjp,$id);
-if($gjpresult == 1){
-	$query->execute([':subject' => $subject, ':body' => $body, ':accID' => $id, ':userID' => $userID, ':userName' => $userName, ':toAccountID' => $toAccountID, ':secret' => $secret, ':uploadDate' => $uploadDate]);
+if($GJPCheck->check($gjp, $accountID)){
+	//Uploading message
+	$query = $db->prepare("INSERT INTO messages (subject, body, accountID, toAccountID, timestamp)
+	VALUES (:subject, :body, :accountID, :toAccountID, :uploadDate)");
+	$query->execute([':subject' => $subject, ':body' => $body, ':accountID' => $accountID, ':toAccountID' => $toAccountID, ':uploadDate' => time()]);
 	echo 1;
 }else{
 	//Failure

@@ -1,58 +1,37 @@
 <?php
 //Requesting files
 include "../../incl/lib/connection.php";
-require "../incl/dashboardLib.php";
-require "../../incl/lib/generatePass.php";
-require "../../incl/lib/mainLib.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/generatePass.php";
+require_once "../../incl/lib/exploitPatch.php";
+$gs = new mainLib();
 $gp = new generatePass();
 $dl = new dashboardLib();
-$gs = new mainLib();
-//Checking if already logged in
+$ep = new exploitPatch();
 $dl = new dashboardLib();
+//Checking if already logged in
 session_start();
-if(isset($_SESSION["accountID"]) AND $_SESSION["accountID"] != 0){
-	$dl->printLoginBox("<p>You are already logged in. <a href='..'>Click here to continue</a></p>");
-	exit();
-}
+if(isset($_SESSION["accountID"]) && !$_SESSION["accountID"]) exit($dl->printLoginBox("<p>You are already logged in. <a href='..'>Click here to continue</a></p>"));
 //Checking nothing's emtpy
-if(isset($_POST["userName"]) AND isset($_POST["password"])){
+if(isset($_POST["username"]) && isset($_POST["password"])){
 	//Getting form data
-	$userName = $_POST["userName"];
+	$username = $ep->remove($_POST["username"]);
 	$password = $_POST["password"];
 	//Checking username and pasword
-	$valid = $gp->isValidUsrname($userName, $password);
-	if($valid == 0){
-		//Printing error
-		$dl->printLoginBoxInvalid();
-		exit();
-	}
+	if(!$gp->isValidUsrname($username, $password)) exit($dl->printLoginBoxInvalid());
 	//Getting account info
-	$accountID = $gs->getAccountIDFromName($userName);
-	if($accountID == 0){
-		//Printing error
-		$dl->printLoginBoxError("Invalid accountID");
-		exit();
-	}
+	$accountID = $gs->getAccountIDFromName($username);
+	if(!$accountID) exit($dl->printLoginBoxError("Invalid accountID"));
 	//Checking if banned
-	$query = $db->prepare("SELECT isBanned FROM accounts WHERE accountID = :accID LIMIT 1");
-	$query->execute([':accID' => $accountID]);
-	$result = $query->fetchColumn();
-	if($result == 1){
-		//Printing error
-		$dl->printLoginBoxError("Account banned");
-		exit();
-	}
-	if($result2 == 0){
-		//Printing error
-		$dl->printLoginBoxError("Account has not been activated.");
-	}
+	if($gs->isBanned($accountID, "account")) exit($dl->printLoginBoxError("Account banned"));
+	//Checking if actiavted
+	$query = $db->prepare("SELECT active FROM accounts WHERE accountID = :accountID LIMIT 1");
+	$query->execute([':accountID' => $accountID]);
+	if(!$query->fetchColumn()) exit($dl->printLoginBoxError("Account has not been activated."));
 	//Setting data
 	$_SESSION["accountID"] = $accountID;
-	if(isset($_POST["ref"])){
-		header('Location: ' . $_POST["ref"]);
-	}elseif(isset($_SERVER["HTTP_REFERER"])){
-		header('Location: ' . $_SERVER["HTTP_REFERER"]);
-	}
+	header('Location: ../');
 	//Printing message
 	$dl->printLoginBox("<p>You are now logged in. <a href='..'>Please click here to continue.</a></p>");
 }else{
@@ -60,7 +39,7 @@ if(isset($_POST["userName"]) AND isset($_POST["password"])){
 	$loginbox = '<form action="" method="post">
 							<div class="form-group">
 								<label for="usernameField">Username</label>
-								<input type="text" class="form-control" id="usernameField" name="userName" placeholder="Enter username">
+								<input type="text" class="form-control" id="usernameField" name="username" placeholder="Enter username">
 							</div>
 							<div class="form-group">
 								<label for="passwordField">Password</label>

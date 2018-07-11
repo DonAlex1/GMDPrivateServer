@@ -1,7 +1,7 @@
 <?php
-$servername = "";
-$username = "";
-$password = "";
-$dbname = "";
-$maintenance = 0;
+$serverName = "";
+$dbUsername = "";
+$dbPassword = "";
+$dbName = "";
+$maintenanceMode = 0;
 ?>

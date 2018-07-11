@@ -2,11 +2,11 @@
 session_start();
 //Requesting files
 include "../../incl/lib/connection.php";
-require_once "../../incl/lib/exploitPatch.php";
 require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/exploitPatch.php";
 $dl = new dashboardLib();
 $ep = new exploitPatch();
-if(isset($_GET["h"]) && $_GET["h"] != "" && isset($_GET["e"]) && $_GET["e"] != ""){
+if(isset($_GET["h"]) && $_GET["h"] && isset($_GET["e"]) && $_GET["e"]){
 	//Here im getting all the data
     $hash = $ep->remove(base64_decode($_GET["h"]));
     $email = $ep->remove(base64_decode($_GET["e"]));
@@ -16,7 +16,7 @@ if(isset($_GET["h"]) && $_GET["h"] != "" && isset($_GET["e"]) && $_GET["e"] != "
     $regusrs = $query2->fetchColumn();
     if($regusrs > 0){
         //Activating account
-        $query = $db->prepare("UPDATE `accounts` SET `active` = 1 WHERE hash = :hash AND active = 0");
+        $query = $db->prepare("UPDATE accounts SET active = 1 WHERE hash = :hash AND active = 0");
         $query->execute([':hash' => $hash]);
         //Printing box
         $dl->printBox("<h1>".$dl->getLocalizedString("activate")."</h1>

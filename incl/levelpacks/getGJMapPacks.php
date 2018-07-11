@@ -7,37 +7,36 @@ require "../lib/generateHash.php";
 $hash = new generateHash();
 $ep = new exploitPatch();
 //Getting data
-$secret = $ep->remove($_POST["secret"]);
-if($secret != "Wmfd2893gb7"){
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7"){
 	exit("-1");
 }
 $page = $ep->remove($_POST["page"]);
-$packpage = $page*10;
-$mappackstring = "";
-$lvlsmultistring = "";
+$packPage = $page * 10;
+$mapPacksString;
+$lvlsmultistring;
 //Getting map packs
-$query = $db->prepare("SELECT * FROM mappacks ORDER BY difficulty ASC LIMIT 10 OFFSET $packpage");
+$query = $db->prepare("SELECT * FROM mapPacks ORDER BY difficulty ASC LIMIT 10 OFFSET $packPage");
 $query->execute();
 $result = $query->fetchAll();
-$packcount = $query->rowCount();
-foreach($result as &$mappack){
+foreach($result as &$mapPack){
 	//Getting map pack data
-	$lvlsmultistring .= $mappack["ID"] . ",";
-	$colors2 = $mappack["colors2"];
-	if($colors2 == "none" OR $colors2 == ""){
-		$colors2 = $mappack["rgbcolors"];
+	$lvlsmultistring .= $mapPack["ID"] . ",";
+	$colors2 = $mapPack["colors2"];
+	if($colors2 == "none" || $colors2 == ""){
+		$colors2 = $mapPack["rgbcolors"];
 	}
-	$mappackstring .= "1:".$mappack["ID"].":2:".$mappack["name"].":3:".$mappack["levels"].":4:".$mappack["stars"].":5:".$mappack["coins"].":6:".$mappack["difficulty"].":7:".$mappack["rgbcolors"].":8:".$colors2."|";
+	$mapPacksString .= "1:".$mapPack["ID"].":2:".$mapPack["name"].":3:".$mapPack["levels"].":4:".$mapPack["stars"].":5:".$mapPack["coins"].":6:".$mapPack["difficulty"].":7:".$mapPack["rgbcolors"].":8:".$colors2."|";
 }
 //Count
-$query = $db->prepare("SELECT count(*) FROM mappacks");
+$query = $db->prepare("SELECT count(*) FROM mapPacks");
 $query->execute();
-$totalpackcount = $query->fetchColumn();
+$totalPackCount = $query->fetchColumn();
+if(!$totalPackCount) exit("-1");
 //Printing map packs
-$mappackstring = substr($mappackstring, 0, -1);
+$mapPacksString = substr($mapPacksString, 0, -1);
 $lvlsmultistring = substr($lvlsmultistring, 0, -1);
-echo $mappackstring;
-echo "#".$totalpackcount.":".$packpage.":10";
+echo $mapPacksString;
+echo "#".$totalPackCount.":".$packPage.":10";
 echo "#";
 echo $hash->genPack($lvlsmultistring);
 ?>

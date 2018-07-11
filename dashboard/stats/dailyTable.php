@@ -1,44 +1,43 @@
 <?php
 //Check if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Request files
-require "../incl/dashboardLib.php";
-$dl = new dashboardLib();
-require "../../incl/lib/mainLib.php";
+include "../../incl/lib/connection.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
+require_once "../../incl/lib/exploitPatch.php";
 $gs = new mainLib();
-require "../../incl/lib/connection.php";
+$dl = new dashboardLib();
+$ep = new exploitPatch();
 //Generating daily table
-if(isset($_GET["page"]) AND is_numeric($_GET["page"]) AND $_GET["page"] > 0){
-	$page = ($_GET["page"] - 1) * 10;
-	$actualpage = $_GET["page"];
+if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
+	$page = ($ep->remove($_GET["page"]) - 1) * 10;
+	$actualPage = $ep->remove($_GET["page"]);
 }else{
 	$page = 0;
-	$actualpage = 1;
+	$actualPage = 1;
 }
-$dailytable = "";
+$dailytable;
 //Getting data
-$query = $db->prepare("SELECT feaID, levelID, timestamp FROM dailyfeatures WHERE timestamp < :time ORDER BY feaID DESC LIMIT 10 OFFSET $page");
+$query = $db->prepare("SELECT feaID, levelID, timestamp FROM dailyFeatures WHERE timestamp < :time ORDER BY feaID DESC LIMIT 10 OFFSET $page");
 $query->execute([':time' => time()]);
-$result = $query->fetchAll();
-$query = $db->prepare("SELECT count(*) FROM dailyfeatures WHERE timestamp < :time");
+$dailies = $query->fetchAll();
+$query = $db->prepare("SELECT count(*) FROM dailyFeatures WHERE timestamp < :time");
 $query->execute([':time' => time()]);
-$dailycount = $query->fetchColumn();
-$x = $dailycount - $page;
+$dailyCount = $query->fetchColumn();
+$x = $dailyCount - $page;
 //Printing data
-foreach($result as &$daily){
+foreach($dailies as &$daily){
 	//Getting level data
-	$query = $db->prepare("SELECT levelName,userID,starStars,coins FROM levels WHERE levelID = :levelID");
+	$query = $db->prepare("SELECT levelName, userID, starStars, coins FROM levels WHERE levelID = :levelID");
 	$query->execute([':levelID' => $daily["levelID"]]);
 	$level = $query->fetch();
-	if($query->rowCount() == 0){
-		$level["levelName"] = $dl->getLocalizedString("deletedLevel");
+	if(!$query->rowCount()){
+		$level["coins"] = 0;
 		$level["userID"] = 0;
-		$level["starStars"] = -1;
-		$level["coins"] = -1;
+		$level["starStars"] = 0;
+		$level["levelName"] = $dl->getLocalizedString("deletedLevel");
 	}
 	$dailytable .= '<tr>
 					<th scope="row">'.$x.'</th>
@@ -53,8 +52,8 @@ foreach($result as &$daily){
 	echo "</td></tr>";
 }
 //Bottom row
-$pagecount = ceil($dailycount / 10);
-$bottomrow = $dl->generateBottomRow($pagecount, $actualpage);
+$pageCount = ceil($dailyCount / 10);
+$bottomRow = $dl->generateBottomRow($pageCount, $actualPage);
 //Printing table
 $dl->printPage('<table class="table table-inverse">
 	<thead>
@@ -72,5 +71,5 @@ $dl->printPage('<table class="table table-inverse">
 		'.$dailytable.'
 	</tbody>
 </table>'
-.$bottomrow, true, "stats");
+.$bottomRow, true, "stats");
 ?>

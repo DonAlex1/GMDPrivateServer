@@ -18,25 +18,18 @@ $commentID = $ep->remove($_POST["commentID"]);
 $accountID = $ep->remove($_POST["accountID"]);
 //Checking GJP
 $gjp = $ep->remove($_POST["gjp"]);
-$gjpresult = $GJPCheck->check($gjp,$accountID);
-if($gjpresult == 1){
+if($GJPCheck->check($gjp, $accountID)){
 	//Checking moderator status
 	$permState = $gs->getMaxValuePermission($id, "actionRequestMod");
 	if($permState == 2){
 		//Deleting
-		$query = $db->prepare("DELETE FROM acccomments WHERE commentID=:commentID LIMIT 1");
+		$query = $db->prepare("DELETE FROM accComments WHERE commentID = :commentID LIMIT 1");
 		$query->execute([':commentID' => $commentID]);
 		echo "1";
 	}
-	//Getting user ID
-	$query2 = $db->prepare("SELECT userID FROM users WHERE extID = :accountID");
-	$query2->execute([':accountID' => $accountID]);
-	if ($query2->rowCount() > 0) {
-		$userID = $query2->fetchColumn();
-	}
 	//Deleting
-	$query = $db->prepare("DELETE FROM acccomments WHERE commentID=:commentID AND userID=:userID AND secret=:secret LIMIT 1");
-	$query->execute([':userID' => $userID, ':commentID' => $commentID, ':secret' => "Wmfd2893gb7"]);
+	$query = $db->prepare("DELETE FROM accComments WHERE commentID = :commentID AND accountID = :accountID LIMIT 1");
+	$query->execute([':accountID' => $accountID, ':commentID' => $commentID]);
 	echo "1";
 }else{
 	//Failure

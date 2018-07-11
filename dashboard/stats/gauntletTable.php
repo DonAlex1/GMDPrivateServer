@@ -1,39 +1,34 @@
 <?php
 //Checking if logged in
 session_start();
-if(!isset($_SESSION["accountID"]) OR $_SESSION["accountID"] == 0){
-	header("Location: ../login/login.php");
-	exit();
-}
+if(!isset($_SESSION["accountID"]) || !$_SESSION["accountID"]) exit(header("Location: ../login/login.php"));
 //Requesting files
 include "../../incl/lib/connection.php";
-require "../incl/dashboardLib.php";
-$dl = new dashboardLib();
-require "../../incl/lib/mainLib.php";
+require_once "../incl/dashboardLib.php";
+require_once "../../incl/lib/mainLib.php";
 $gs = new mainLib();
+$dl = new dashboardLib();
 //Generating gauntlet table
-if(isset($_GET["page"]) AND is_numeric($_GET["page"]) AND $_GET["page"] > 0){
-	$page = ($_GET["page"] - 1) * 10;
-	$actualpage = $_GET["page"];
+if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
+	$page = ($ep->remove($_GET["page"]) - 1) * 10;
+	$actualpage = $ep->remove($_GET["page"]);
 }else{
 	$page = 0;
 	$actualpage = 1;
 }
 $x = $page + 1;
-$gauntlettable = "";
+$gauntlettable;
 //Getting data
 $query = $db->prepare("SELECT * FROM gauntlets ORDER BY ID ASC LIMIT 10 OFFSET $page");
 $query->execute();
-$result = $query->fetchAll();
-foreach($result as &$gauntlet){
+$gauntlets = $query->fetchAll();
+foreach($gauntlets as &$gauntlet){
 	//Getting levels
+	$lvltable;
 	$lvlarray = array();
-	for ($y = 1; $y < 6; $y++) {
-		$lvlarray[] = $gauntlet["level".$y];
-	}
-	$lvltable = "";
+	for ($y = 1; $y < 6; $y++) $lvlarray[] = $gauntlet["level".$y];
 	foreach($lvlarray as &$lvl){
-		$query = $db->prepare("SELECT levelID,levelName,starStars,userID,coins FROM levels WHERE levelID = :levelID");
+		$query = $db->prepare("SELECT levelID, levelName, starStars, userID, coins FROM levels WHERE levelID = :levelID");
 		$query->execute([':levelID' => $lvl]);
 		$level = $query->fetch();
 		$lvltable .= "<tr>
@@ -74,10 +69,10 @@ foreach($result as &$gauntlet){
 //Getting count
 $query = $db->prepare("SELECT count(*) FROM gauntlets");
 $query->execute();
-$gauntletcount = $query->fetchColumn();
-$pagecount = ceil($gauntletcount / 10);
+$gauntletCount = $query->fetchColumn();
+$pageCount = ceil($gauntletCount / 10);
 //Bottom row
-$bottomrow = $dl->generateBottomRow($pagecount, $actualpage);
+$bottomRow = $dl->generateBottomRow($pageCount, $actualpage);
 //Printing page
 $dl->printPage('<table class="table table-inverse">
   <thead>
@@ -91,5 +86,5 @@ $dl->printPage('<table class="table table-inverse">
     '.$gauntlettable.'
   </tbody>
 </table>'
-.$bottomrow, true, "browse");
+.$bottomRow, true, "browse");
 ?>

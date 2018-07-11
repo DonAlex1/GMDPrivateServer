@@ -16,8 +16,7 @@ $accountID = $ep->remove($_POST["accountID"]);
 $requestID = $ep->remove($_POST["requestID"]);
 //Checking GJP
 $gjp = $ep->remove($_POST["gjp"]);
-$gjpresult = $GJPCheck->check($gjp,$accountID);
-if($gjpresult == 1){
+if($GJPCheck->check($gjp,$accountID)){
 	//Reading
 	$query = $db->prepare("UPDATE friendreqs SET isNew='0' WHERE ID = :requestID AND toAccountID = :targetAcc");
 	$query->execute([':requestID' => $requestID, ':targetAcc' => $accountID]);
