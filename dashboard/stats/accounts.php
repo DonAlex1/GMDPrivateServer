@@ -28,6 +28,7 @@ if($gs->checkPermission($_SESSION["accountID"], "dashboardModTools")){
 	$query->execute();
 	$accCount = $query->fetchColumn();
 	$x = $accCount - $page;
+	$acctable = "";
 	//Printing data
 	foreach($accounts as &$account){
 		//Getting account data

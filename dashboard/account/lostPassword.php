@@ -1,4 +1,5 @@
 <?php
+session_start();
 //Requesting files
 include "../../config/email.php";
 include "../../incl/lib/connection.php";
@@ -46,7 +47,7 @@ $query->execute([':username' => $username]);
 $email = $query->fetchColumn();
 $baseEmail = base64_encode($email);
 //Checking nothing's empty
-if($username && $newPassword){
+if(isset($_POST["username"]) && isset($_POST["newPassword"])){
     //Creating hash
     $query = $db->prepare("SELECT hash FROM accounts WHERE username = :username AND email = :email LIMIT 1");
     $query->execute([':username' => $username, ':email' => $email]);

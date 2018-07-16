@@ -18,7 +18,7 @@ if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
 	$page = 0;
 	$actualPage = 1;
 }
-$dailytable;
+$dailytable = "";
 //Getting data
 $query = $db->prepare("SELECT feaID, levelID, timestamp FROM dailyFeatures WHERE timestamp < :time ORDER BY feaID DESC LIMIT 10 OFFSET $page");
 $query->execute([':time' => time()]);

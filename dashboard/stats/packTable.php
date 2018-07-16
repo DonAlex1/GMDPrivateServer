@@ -17,7 +17,7 @@ if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
 	$page = 0;
 	$actualPage = 1;
 }
-$packtable;
+$packtable = "";
 $x = $page + 1;
 //Getting map packs
 $query = $db->prepare("SELECT levels, name, stars, coins FROM mapPacks ORDER BY ID ASC LIMIT 10 OFFSET $page");

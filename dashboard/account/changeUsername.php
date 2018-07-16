@@ -79,7 +79,7 @@ $query->execute([':username' => $username]);
 $email = $query->fetchColumn();
 $baseEmail = base64_encode($email);
 //Checking nothing's empty
-if($username && $newUsername && $password){
+if(isset($_POST["username"]) && isset($_POST["newUsername"]) && isset($_POST["password"])){
 	//Checking pass
 	if ($generatePass->isValidUsrname($username, $password)) {
 		//Checking how many times username has been changed

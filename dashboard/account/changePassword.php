@@ -49,7 +49,7 @@ $query->execute([':username' => $username]);
 $email = $query->fetchColumn();
 $baseEmail = base64_encode($email);
 //Checking nothing's empty
-if($username && $newPassword && $oldPassword){
+if(isset($_POST["username"]) && isset($_POST["newPassword"]) && isset($_POST["oldPassword"])){
 	//Checking pass
 	if ($generatePass->isValidUsrname($username, $oldPassword)) {
 		//Sending email

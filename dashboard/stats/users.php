@@ -16,7 +16,7 @@ if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
 	$page = 0;
 	$actualpage = 1;
 }
-$usertable;
+$usertable = "";
 //Getting data
 $query = $db->prepare("SELECT * FROM users WHERE isRegistered = '1' AND isBanned = '0' ORDER BY userID DESC LIMIT 10 OFFSET $page");
 $query->execute();

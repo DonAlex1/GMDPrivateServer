@@ -17,7 +17,7 @@ if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
 	$actualpage = 1;
 }
 $x = $page + 1;
-$gauntlettable;
+$gauntlettable = "";
 //Getting data
 $query = $db->prepare("SELECT * FROM gauntlets ORDER BY ID ASC LIMIT 10 OFFSET $page");
 $query->execute();
