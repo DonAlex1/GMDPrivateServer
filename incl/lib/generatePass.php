@@ -8,15 +8,13 @@ class generatePass
 		$gs = new mainLib();
 		//Getting IP
 		$hostname = $gs->getIP();
-		$query = $db->prepare("SELECT accountID, salt, password, isAdmin FROM accounts WHERE username LIKE :username");
+		$query = $db->prepare("SELECT accountID, password, isAdmin FROM accounts WHERE username LIKE :username");
 		$query->execute([':username' => $username]);
-		if($query->rowCount() == 0){
-			return false;
-		}
+		if(!$query->rowCount()) return false;
 		$result = $query->fetch();
 		if(password_verify($pass, $result["password"])){
 			$modipCategory = $gs->getMaxValuePermission($result["accountID"], "modipCategory");
-			if($modipCategory > 0){ //modIPs
+			if($modipCategory > 0){
 				$query4 = $db->prepare("SELECT count(*) FROM modips WHERE accountID = :id");
 				$query4->execute([':id' => $result["accountID"]]);
 				if ($query4->fetchColumn() > 0) {
@@ -28,28 +26,7 @@ class generatePass
 			}
 			return true;
 		}else{
-			$md5pass = md5($pass . "epithewoihewh577667675765768rhtre67hre687cvolton5gw6547h6we7h6wh");
-			CRYPT_BLOWFISH or die ("-2");
-			$Blowfish_Pre = '$2a$05$';
-			$Blowfish_End = '$';
-			$hashed_pass = crypt($md5pass, $Blowfish_Pre . $result['salt'] . $Blowfish_End);
-			if ($hashed_pass == $result['password']) {
-				$pass = password_hash($pass, PASSWORD_DEFAULT);
-				//Updating hash
-				$query = $db->prepare("UPDATE accounts SET password = :password WHERE username = :username LIMIT 1");
-				$query->execute([':username' => $username, ':password' => $pass]);
-				return true;
-			} else {
-				if($md5pass == $result['password']){
-					$pass = password_hash($pass, PASSWORD_DEFAULT);
-					//Updating hash
-					$query = $db->prepare("UPDATE accounts SET password = :password WHERE username = :username LIMIT 1");
-					$query->execute([':username' => $username, ':password' => $pass]);
-					return true;
-				} else {
-					return false;
-				}
-			}
+			return false;
 		}
 	}
 
@@ -57,13 +34,10 @@ class generatePass
 		include dirname(__FILE__)."/connection.php";
 		$query = $db->prepare("SELECT username FROM accounts WHERE accountID = :accountID");
 		$query->execute([':accountID' => $accountID]);
-		if($query->rowCount() == 0){
-			return false;
-		}
+		if(!$query->rowCount()) return false;
 		$result = $query->fetch();
 		$username = $result["username"];
-		$generatePass = new generatePass();
-		return $generatePass->isValidUsrname($username, $password);
+		return $this->isValidUsrname($username, $password);
 		//return $username;
 	}
 }
