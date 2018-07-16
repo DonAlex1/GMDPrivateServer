@@ -16,23 +16,17 @@ if(!empty($_POST["getSent"])){
 	$getSent = 0;
 }
 //Checking nothing's empty
-if(empty($_POST["accountID"]) OR (!isset($_POST["page"]) OR !is_numeric($_POST["page"])) OR empty($_POST["gjp"])){
-	//Error
-	exit("-1");
-}
+if(empty($_POST["accountID"]) || (!isset($_POST["page"]) || !is_numeric($_POST["page"])) || empty($_POST["gjp"])) exit("-1");
 $accountID = $ep->remove($_POST["accountID"]);
 $page = $ep->remove($_POST["page"]);
 //Checking GJP
 $gjp = $ep->remove($_POST["gjp"]);
-if(!$GJPCheck->check($gjp,$accountID)){
-	//Error
-	exit("-1");
-}
-$offset = $page*10;
-if($getSent == 0){
+if(!$GJPCheck->check($gjp, $accountID)) exit("-1");
+$offset = $page * 10;
+if(!$getSent){
 	$query = "SELECT accountID, toAccountID, uploadDate, ID, comment, isNew FROM friendreqs WHERE toAccountID = :accountID LIMIT 10 OFFSET $offset";
 	$countquery = "SELECT count(*) FROM friendreqs WHERE toAccountID = :accountID";
-}else if($getSent == 1){
+}elseif($getSent){
 	$query = "SELECT * FROM friendreqs WHERE accountID = :accountID LIMIT 10 OFFSET $offset";
 	$countquery = "SELECT count(*) FROM friendreqs WHERE accountID = :accountID";
 }
@@ -42,14 +36,11 @@ $result = $query->fetchAll();
 $countquery = $db->prepare($countquery);
 $countquery->execute([':accountID' => $accountID]);
 $reqcount = $countquery->fetchColumn();
-if($reqcount == 0){
-	//Nothing
-	exit("-2");
-}
+if(!$reqcount) exit("-2");
 foreach($result as &$request) {
-	if($getSent == 0){
+	if(!$getSent){
 		$requester = $request["accountID"];
-	}else if($getSent == 1){
+	}elseif($getSent){
 		$requester = $request["toAccountID"];
 	}
 	$query = "SELECT userName, userID, icon, color1, color2, iconType, special, extID FROM users WHERE extID = :requester";
@@ -57,7 +48,7 @@ foreach($result as &$request) {
 	$query->execute([':requester' => $requester]);
 	$result2 = $query->fetchAll();
 	$user = $result2[0];
-	$uploadTime = $gs->time_elapsed_string(date("Y-m-d H:i:s", $request["uploadDate"]));
+	$uploadTime = $gs->convertDate(date("Y-m-d H:i:s", $request["uploadDate"]));
 	if(is_numeric($user["extID"])){
 		$extid = $user["extID"];
 	}else{

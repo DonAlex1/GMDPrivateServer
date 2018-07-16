@@ -67,8 +67,9 @@ class dashboardLib{
 		$cronActive = "";
 		$statsActive = "";
 		$loginActive = "";
+		$browseActive = "";
 		$accountActive = "";
-		$reuploadActiv = "";
+		$reuploadActive = "";
 		switch($active){
 			case "home":
 				$homeActive = "active";

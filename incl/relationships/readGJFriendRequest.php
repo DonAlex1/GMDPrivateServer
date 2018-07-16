@@ -7,10 +7,7 @@ require_once "../lib/exploitPatch.php";
 $ep = new exploitPatch();
 $GJPCheck = new GJPCheck();
 //Checking nothing's empty
-if(empty($_POST["accountID"]) OR empty($_POST["gjp"]) OR empty($_POST["requestID"])){
-	//Error
-	exit("-1");
-}
+if(empty($_POST["accountID"]) || empty($_POST["gjp"]) || empty($_POST["requestID"])) exit("-1");
 //Getting data 
 $accountID = $ep->remove($_POST["accountID"]);
 $requestID = $ep->remove($_POST["requestID"]);
@@ -18,7 +15,7 @@ $requestID = $ep->remove($_POST["requestID"]);
 $gjp = $ep->remove($_POST["gjp"]);
 if($GJPCheck->check($gjp,$accountID)){
 	//Reading
-	$query = $db->prepare("UPDATE friendreqs SET isNew='0' WHERE ID = :requestID AND toAccountID = :targetAcc");
+	$query = $db->prepare("UPDATE friendreqs SET isNew = '0' WHERE ID = :requestID AND toAccountID = :targetAcc");
 	$query->execute([':requestID' => $requestID, ':targetAcc' => $accountID]);
 	echo "1";
 }else{

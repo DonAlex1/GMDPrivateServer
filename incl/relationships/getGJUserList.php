@@ -7,9 +7,7 @@ require_once "../lib/exploitPatch.php";
 $ep = new exploitPatch();
 $GJPCheck = new GJPCheck();
 //Checking nothing's empty
-if(empty($_POST["accountID"]) OR empty($_POST["gjp"]) OR (!isset($_POST["type"]) OR !is_numeric($_POST["type"]))){
-	exit("-1");
-}
+if(empty($_POST["accountID"]) || empty($_POST["gjp"]) || (!isset($_POST["type"]) || !is_numeric($_POST["type"]))) exit("-1");
 //Getting data
 $accountID = $ep->remove($_POST["accountID"]);
 $type = $ep->remove($_POST["type"]);
@@ -18,21 +16,18 @@ $peoplestring = "";
 $new = array();
 //Checking GJP
 $gjp = $ep->remove($_POST["gjp"]);
-if(!$GJPCheck->check($gjp,$accountID)){
-	//Error
-	exit("-1");
-}
+if(!$GJPCheck->check($gjp,$accountID)) exit("-1");
 //Detecting type
-if($type == 0){
+if(!$type){
 	$query = "SELECT * FROM friendships WHERE person1 = :accountID OR person2 = :accountID";
-}else if($type == 1){
+}elseif($type){
 	$query = "SELECT * FROM blocks WHERE person1 = :accountID";
 }
 $query = $db->prepare($query);
 $query->execute([':accountID' => $accountID]);
 $result = $query->fetchAll();
-if($query->rowCount() == 0){
-	//Nothings
+if(!$query->rowCount()){
+	//Nothing
 	exit("-2");
 }else{
 	foreach ($result as &$friendship) {
@@ -45,7 +40,7 @@ if($query->rowCount() == 0){
 		$new[$person] = $isnew;
 		$people .= $person . ",";
 	}
-	$people = substr($people, 0,-1);
+	$people = substr($people, 0, -1);
 	//Getting users
 	$query = $db->prepare("SELECT userName, userID, icon, color1, color2, iconType, special, extID FROM users WHERE extID IN ($people) ORDER BY userName ASC");
 	$query->execute();
@@ -58,10 +53,7 @@ if($query->rowCount() == 0){
 	$query->execute([':me' => $accountID]);
 	$query = $db->prepare("UPDATE friendships SET isNew2 = '0' WHERE person1 = :me");
 	$query->execute([':me' => $accountID]);
-	if($peoplestring == ""){
-		//Error
-		exit("-1");
-	}
+	if(!$peoplestring) exit("-1");
 	//Printing users
 	echo $peoplestring;
 }
