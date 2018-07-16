@@ -9,6 +9,7 @@ $gs = new mainLib();
 //Getting data
 if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-2");
 $commentsString = "";
+$levelID = 0;
 $page = $ep->remove($_POST["page"]);
 $gameVersion = $ep->remove($_POST["gameVersion"]);
 $binaryVersion = $ep->remove($_POST["binaryVersion"]);
