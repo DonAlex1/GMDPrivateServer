@@ -3,7 +3,7 @@
 chdir(dirname(__FILE__));
 include "../lib/connection.php";
 //Checking if daily or weekly
-if(empty($_POST["weekly"]) || $_POST["weekly"] == 0){
+if(empty($_POST["weekly"]) || !$_POST["weekly"]){
 	$weekly = 0;
 	$midnight = strtotime("tomorrow 00:00:00");
 }else{
@@ -15,7 +15,7 @@ $query = $db->prepare("SELECT feaID FROM dailyFeatures WHERE timestamp < :curren
 $query->execute([':current' => time(), ':type' => $weekly]);
 $dailyID = $query->fetchColumn();
 //Getting weekly ID
-if($weekly == 1) $dailyID = $dailyID + 100001;
+if($weekly) $dailyID = $dailyID + 100001;
 //Time left
 $timeleft = $midnight - time();
 //Printing

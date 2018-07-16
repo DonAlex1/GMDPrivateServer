@@ -8,7 +8,7 @@ $gs = new mainLib();
 $GJPCheck = new GJPCheck();
 $ep = new exploitPatch();
 //Getting data
-$msgstring;
+$msgstring = "";
 if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
 $accountID = $ep->remove($_POST["accountID"]);
 $page = $ep->remove($_POST["page"]);
@@ -32,12 +32,12 @@ $messages = $query->fetchAll();
 $countquery = $db->prepare($countquery);
 $countquery->execute([':accountID' => $accountID]);
 $msgcount = $countquery->fetchColumn();
-if($msgcount == 0) exit("-2");
+if(!$msgcount) exit("-2");
 foreach ($messages as &$message) {
 	//Getting message data
-	if($message["messageID"] != ""){
+	if($message["messageID"]){
 		$uploadDate = $gs->convertDate(date("Y-m-d H:i:s", $message["timestamp"]));
-		if($getSent == 1){
+		if($getSent){
 			$accountID = $message["toAccountID"];
 		}else{
 			$accountID = $message["accID"];

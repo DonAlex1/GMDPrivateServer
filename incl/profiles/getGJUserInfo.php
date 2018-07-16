@@ -71,17 +71,17 @@ if($me == $extid){
 	$INCrequests = $query->rowCount();
 	$INCrequestinfo = $query->fetch();
 	$uploaddate = $gs->convertDate(date("Y-m-d H:i:s", $INCrequestinfo["uploadDate"]));
-	if($INCrequests > 0) $friendstate = 3;
+	if($INCrequests) $friendstate = 3;
 	//Check if outcoming friend request
 	$query = $db->prepare("SELECT count(*) FROM friendreqs WHERE toAccountID = :extid AND accountID = :me");
 	$query->execute([':extid' => $extid, ':me' => $me]);
 	$OUTrequests = $query->fetchColumn();
-	if($OUTrequests > 0) $friendstate = 4;
+	if($OUTrequests) $friendstate = 4;
 	//Check if is already friend
 	$query = $db->prepare("SELECT count(*) FROM friendships WHERE (person1 = :me AND person2 = :extID) OR (person2 = :me AND person1 = :extID)");
 	$query->execute([':me' => $me, ':extID' => $extid]);
 	$frs = $query->fetchColumn();
-	if($frs > 0) $friendstate = 1;
+	if($frs) $friendstate = 1;
 	//Sending data
 	echo "1:".$user["userName"].":2:".$user["userID"].":13:".$user["coins"].":17:".$user["userCoins"].":10:".$user["color1"].":11:".$user["color2"].":3:".$user["stars"].":46:".$user["diamonds"].":4:".$user["demons"].":8:".$creatorpoints.":18:0:19:".$reqsstate.":50:".$commentstate.":20:".$accinfo["youtubeurl"].":21:".$user["accIcon"].":22:".$user["accShip"].":23:".$user["accBall"].":24:".$user["accBird"].":25:".$user["accDart"].":26:".$user["accRobot"].":28:".$user["accGlow"].":43:".$user["accSpider"].":47:".$user["accExplosion"].":30:".$rank.":16:".$user["extID"].":31:".$friendstate.":44:".$accinfo["twitter"].":45:".$accinfo["twitch"].":29:1:49:".$badge;
 	if($INCrequests > 0) echo ":32:".$INCrequestinfo["ID"].":35:".$INCrequestinfo["comment"].":37:".$uploaddate;

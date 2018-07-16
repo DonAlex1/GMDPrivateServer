@@ -19,7 +19,7 @@ if($GJPCheck->check($gjp, $accountID)){
 	$query=$db->prepare("SELECT * FROM messages WHERE messageID = :messageID AND (accID = :accID OR toAccountID = :accID) LIMIT 1");
 	$query->execute([':messageID' => $messageID, ':accID' => $accountID]);
 	$result = $query->fetch();
-	if($query->rowCount() == 0) exit("-1");
+	if(!$query->rowCount()) exit("-1");
 	//Checking if is sender
 	if(empty($_POST["isSender"])){
 		//Setting as viewed
