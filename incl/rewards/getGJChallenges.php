@@ -13,17 +13,14 @@ $ep = new exploitPatch();
 //Getting data
 $accountID = $ep->remove($_POST["accountID"]);
 $udid = $ep->remove($_POST["udid"]);
-if(is_numeric($udid)){
-	//Error
-	exit("-1");
-}
+if(is_numeric($udid)) exit("-1");
 $chk = $ep->remove($_POST["chk"]);
-if($accountID != 0){
+if($accountID){
 	$userID = $gs->getUserID($accountID);
 }else{
 	$userID = $gs->getUserID($udid);
 }
-$chk = $XORCipher->cipher(base64_decode(substr($chk, 5)),19847);
+$chk = $XORCipher->cipher(base64_decode(substr($chk, 5)), 19847);
 //Generating quests IDs
 $from = strtotime('2000-12-17');
 $today = time();
@@ -37,7 +34,7 @@ $quest3ID = $questID + 2;
 $midnight = strtotime("tomorrow 00:00:00");
 $current = time();
 $timeleft = $midnight - $current;
-$query=$db->prepare("SELECT * FROM quests");
+$query = $db->prepare("SELECT * FROM quests");
 $query->execute();
 $result = $query->fetchAll();
 shuffle($result);

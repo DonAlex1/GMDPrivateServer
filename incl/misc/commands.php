@@ -6,9 +6,7 @@ class Commands {
 		$commandInComment = strtolower("!".$command);
 		$commandInPerms = ucfirst(strtolower($command));
 		$commandlength = strlen($commandInComment);
-		if(substr($comment,0,$commandlength) == $commandInComment && (($gs->checkPermission($accountID, "command".$commandInPerms."All") OR ($targetExtID == $accountID && $gs->checkPermission($accountID, "command".$commandInPerms."Own"))))){
-			return true;
-		}
+		if(substr($comment, 0, $commandlength) == $commandInComment && (($gs->checkPermission($accountID, "command".$commandInPerms."All") || ($targetExtID == $accountID && $gs->checkPermission($accountID, "command".$commandInPerms."Own"))))) return true;
 		return false;
 	}
 	//Comments commands
@@ -53,10 +51,10 @@ class Commands {
 		if(substr($comment, 0, 6) == '!daily' && $gs->checkPermission($accountID, "commandDaily")){
 			$query = $db->prepare("SELECT count(*) FROM dailyFeatures WHERE levelID = :level AND type = 0");
 			$query->execute([':level' => $levelID]);
-			if($query->fetchColumn() != 0) return false;
+			if($query->fetchColumn()) return false;
 			$query = $db->prepare("SELECT timestamp FROM dailyFeatures WHERE timestamp >= :tomorrow AND type = 0 ORDER BY timestamp DESC LIMIT 1");
 			$query->execute([':tomorrow' => strtotime("tomorrow 00:00:00")]);
-			if($query->rowCount() == 0){
+			if(!$query->rowCount()){
 				$timestamp = strtotime("tomorrow 00:00:00");
 			}else{
 				$timestamp = $query->fetchColumn() + 86400;
@@ -70,10 +68,10 @@ class Commands {
 		if(substr($comment, 0, 7) == '!weekly' && $gs->checkPermission($accountID, "commandWeekly")){
 			$query = $db->prepare("SELECT count(*) FROM dailyfeatures WHERE levelID = :level AND type = 1");
 			$query->execute([':level' => $levelID]);
-			if($query->fetchColumn() != 0) return false;
+			if($query->fetchColumn()) return false;
 			$query = $db->prepare("SELECT timestamp FROM dailyFeatures WHERE timestamp >= :tomorrow AND type = 1 ORDER BY timestamp DESC LIMIT 1");
 			$query->execute([':tomorrow' => strtotime("next monday")]);
-			if($query->rowCount() == 0){
+			if(!$query->rowCount()){
 				$timestamp = strtotime("next monday");
 			}else{
 				$timestamp = $query->fetchColumn() + 604800;
@@ -88,15 +86,13 @@ class Commands {
 			if(!is_numeric($levelID)) return false;
 			$query = $db->prepare("DELETE FROM levels WHERE levelID = :levelID LIMIT 1");
 			$query->execute([':levelID' => $levelID]);
-			if(file_exists(dirname(__FILE__)."../../data/levels/$levelID")){
-				rename(dirname(__FILE__)."../../data/levels/$levelID",dirname(__FILE__)."../../data/levels/deleted/$levelID");
-			}
+			if(file_exists(dirname(__FILE__)."../../data/levels/$levelID")) unlink(dirname(__FILE__)."../../data/levels/$levelID",dirname(__FILE__)."../../data/levels/deleted/$levelID");
 			return true;
 		}
 		if(substr($comment, 0, 7) == '!setacc' && $gs->checkPermission($accountID, "commandSetacc")){
 			$query = $db->prepare("SELECT accountID FROM accounts WHERE userName = :userName OR accountID = :userName LIMIT 1");
 			$query->execute([':userName' => $commentarray[1]]);
-			if($query->rowCount() == 0) return false;
+			if(!$query->rowCount()) return false;
 			$targetAcc = $query->fetchColumn();
 			$query = $db->prepare("SELECT userID FROM users WHERE extID = :extID LIMIT 1");
 			$query->execute([':extID' => $targetAcc]);
@@ -153,6 +149,7 @@ class Commands {
 				$query->execute([':accountID' => $accountID]);
 				return true;
 			}
+			return false;
 		}
 		return false;
 	}

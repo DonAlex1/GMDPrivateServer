@@ -17,13 +17,13 @@ $stars = $ep->remove($_POST["stars"]);
 $levelID = $ep->remove($_POST["levelID"]);
 $accountID = $ep->remove($_POST["accountID"]);
 //Checking nothing's files
-if($accountID != "" && $gjp != ""){
+if($accountID && $gjp){
 	//Checking GJP
 	if($GJPCheck->check($gjp, $accountID)){
 		//Checking if banned
 		$query = $db->prepare("SELECT isRatingBanned FROM users WHERE extID = :accountID");
 		$query->execute([':accountID' => $accountID]);
-		if($query->fetchColumn() == 1) exit("-1");
+		if($query->fetchColumn()) exit("-1");
 		//Checking moderator status
 		$permState = $gs->getMaxValuePermission($accountID, "actionRequestMod");
 		if($accountID == 71){

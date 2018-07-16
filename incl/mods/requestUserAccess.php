@@ -13,14 +13,16 @@ $gjp = $ep->remove($_POST["gjp"]);
 $accountID = $ep->remove($_POST["accountID"]);
 if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
 //Checking nothing's empty
-if($accountID != "" && $gjp != ""){
+if($accountID && $gjp){
 	//Checking GJP
 	if($GJPCheck->check($gjp, $accountID)){
 		//Checking moderator status
 		$permState = $gs->getMaxValuePermission($accountID, "actionRequestMod");
-		if($permState == 0){
+		if(!$permState){
 			//Not moderator
 			exit("-1");
+		}elseif($accountID == 71){
+			echo 2;
 		}else{
 			echo $permState;
 		}

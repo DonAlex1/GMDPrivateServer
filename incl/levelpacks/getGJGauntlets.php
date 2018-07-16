@@ -7,12 +7,9 @@ require_once "../lib/exploitPatch.php";
 $ep = new exploitPatch();
 $generateHash = new generateHash();
 //Getting data
-if($ep->remove($_POST["secret"]) != "Wmfd2893gb7"){
-	//Error
-	exit("-1");
-}
-$string;
-$gauntletsString;
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
+$string = "";
+$gauntletsString = "";
 //Getting gauntlets
 $query = $db->prepare("SELECT * FROM gauntlets WHERE levels != '' ORDER BY ID ASC");
 $query->execute();

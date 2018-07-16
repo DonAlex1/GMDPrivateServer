@@ -7,13 +7,11 @@ require "../lib/generateHash.php";
 $hash = new generateHash();
 $ep = new exploitPatch();
 //Getting data
-if($ep->remove($_POST["secret"]) != "Wmfd2893gb7"){
-	exit("-1");
-}
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
 $page = $ep->remove($_POST["page"]);
 $packPage = $page * 10;
-$mapPacksString;
-$lvlsmultistring;
+$mapPacksString = "";
+$lvlsmultistring = "";
 //Getting map packs
 $query = $db->prepare("SELECT * FROM mapPacks ORDER BY difficulty ASC LIMIT 10 OFFSET $packPage");
 $query->execute();
@@ -22,9 +20,7 @@ foreach($result as &$mapPack){
 	//Getting map pack data
 	$lvlsmultistring .= $mapPack["ID"] . ",";
 	$colors2 = $mapPack["colors2"];
-	if($colors2 == "none" || $colors2 == ""){
-		$colors2 = $mapPack["rgbcolors"];
-	}
+	if($colors2 == "none" || !$colors2) $colors2 = $mapPack["rgbcolors"];
 	$mapPacksString .= "1:".$mapPack["ID"].":2:".$mapPack["name"].":3:".$mapPack["levels"].":4:".$mapPack["stars"].":5:".$mapPack["coins"].":6:".$mapPack["difficulty"].":7:".$mapPack["rgbcolors"].":8:".$colors2."|";
 }
 //Count

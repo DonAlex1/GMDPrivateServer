@@ -18,7 +18,7 @@ $feature = $ep->remove($_POST["feature"]);
 $levelID = $ep->remove($_POST["levelID"]);
 $accountID = $ep->remove($_POST["accountID"]);
 //Checking nothing's empty
-if($accountID != "" && $gjp != ""){
+if($accountID && $gjp){
 	//Checking GJP
 	if($GJPCheck->check($gjp, $accountID)){
 		//Checking moderator status
@@ -30,20 +30,20 @@ if($accountID != "" && $gjp != ""){
 			$gs->featureLevel($accountID, $levelID, $feature);
 			$gs->verifyCoinsLevel($accountID, $levelID, 1);
 			$query = $db->prepare("UPDATE levels SET ratedBy = :ratedBy WHERE levelID = :levelID");
-			$query->execute([':levelID' => $levelID, ':ratedBy' => $accountID]) or die("-1");
+			$query->execute([':levelID' => $levelID, ':ratedBy' => $accountID]);
 			$query = $db->prepare("INSERT INTO modactions (type, value, value2, value3, timestamp, account) VALUES ('1', :value, :value2, :levelID, :timestamp, :id)");
-			$query->execute([':value' => $stars, ':timestamp' => time(), ':id' => $accountID, ':value2' => $feature, ':levelID' => $levelID]) or die("-1");
+			$query->execute([':value' => $stars, ':timestamp' => time(), ':id' => $accountID, ':value2' => $feature, ':levelID' => $levelID]);
 			echo 1;
 		}else{
 			//Suggesting
 			$query = $db->prepare("INSERT INTO ratesSuggestions (levelID, accountID, stars, feature, isMod, hostname, suggestionDate) VALUES (:levelID, :accountID, :stars, :feature, :mod, :hostname, :timestamp)");
 			switch($permState){
 				case 1:
-					$query->execute([':levelID' => $levelID, ':accountID' => $accountID, ':stars' => $stars, ':feature' => $feature, ':mod' => '1', ':hostname' => $hostname, ':timestamp' => time()]) or die("-1");
+					$query->execute([':levelID' => $levelID, ':accountID' => $accountID, ':stars' => $stars, ':feature' => $feature, ':mod' => '1', ':hostname' => $hostname, ':timestamp' => time()]);
 					echo 1;
 					break;
 				case 2:
-					$query->execute([':levelID' => $levelID, ':accountID' => $accountID, ':stars' => $stars, ':feature' => $feature, ':mod' => '2', ':hostname' => $hostname, ':timestamp' => time()]) or die("-1");
+					$query->execute([':levelID' => $levelID, ':accountID' => $accountID, ':stars' => $stars, ':feature' => $feature, ':mod' => '2', ':hostname' => $hostname, ':timestamp' => time()]);
 					echo 1;
 					break;
 				default:

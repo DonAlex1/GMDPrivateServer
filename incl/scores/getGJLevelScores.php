@@ -71,8 +71,7 @@ switch($type){
 		$query2args = [':levelID' => $levelID, ':time' => time() - 604800];
 		break;
 	default:
-		return -1;
-		break;
+		exit("-1");
 }
 $query2->execute($query2args);
 $result = $query2->fetchAll();
