@@ -62,13 +62,13 @@ class dashboardLib{
 	public function printNavbar($active){
 		require_once __DIR__."/../../incl/lib/mainLib.php";
 		$gs = new mainLib();
-		$homeActive;
-		$accountActive;
-		$modActive;
-		$reuploadActiv;
-		$statsActive;
-		$cronActive;
-		$loginActive;
+		$modActive = "";
+		$homeActive = "";
+		$cronActive = "";
+		$statsActive = "";
+		$loginActive = "";
+		$accountActive = "";
+		$reuploadActiv = "";
 		switch($active){
 			case "home":
 				$homeActive = "active";
