@@ -30,7 +30,7 @@ if(!$mode){
 }else{
 	$modeColumn = "likes";
 }
-if(!$_POST["levelID"]){
+if(!isset($_POST["levelID"])){
 	//Getting comments history 
 	$displayLevelID = true;
 	$userID = $ep->remove($_POST["userID"]);
