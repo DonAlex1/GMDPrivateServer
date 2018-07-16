@@ -35,7 +35,7 @@ foreach($result as &$mod){
 	$lvlcount = $query->fetchColumn();
 	$modtable .= "<tr>
 					<th scope='row'>".$row."</th>
-					<td>".$mod["userName"]."</td>
+					<td>".$mod["username"]."</td>
 					<td>".$actionscount."</td>
 					<td>".$lvlcount."</td>
 					<td>".$time."</td>

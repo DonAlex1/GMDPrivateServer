@@ -47,7 +47,7 @@ if($gs->checkPermission($_SESSION["accountID"], "dashboardModTools")){
 						<th scope="row">'.$x.'</th>
 						<td>'.$userID.'</td>
 						<td>'.$account["accountID"].'</td>
-						<td>'.$account["userName"].'</td>
+						<td>'.$account["username"].'</td>
 						<td>'.$account["friendsCount"].'</td>
 						<td>'.$isBanned.'</td>
 						<td>'.$dl->convertToDate($account["registerDate"]).' ago</td>

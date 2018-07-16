@@ -68,7 +68,7 @@ foreach($result as &$pack){
 	$x++;
 }
 //Getting count
-$query = $db->prepare("SELECT count(*) FROM mappacks");
+$query = $db->prepare("SELECT count(*) FROM mapPacks");
 $query->execute();
 $packCount = $query->fetchColumn();
 $pageCount = ceil($packCount / 10);

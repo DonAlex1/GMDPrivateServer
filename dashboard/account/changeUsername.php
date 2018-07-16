@@ -67,19 +67,19 @@ if(isset($_GET["e"]) && isset($_GET["u"]) && isset($_GET["p"]) && isset($_GET["n
 						<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","account"));
 	}
 }
-//Getting form data
-$username = $ep->remove($_POST["username"]);
-$baseUsername = base64_encode($username);
-$newUsername = $ep->remove($_POST["newUsername"]);
-$baseNewUsername = base64_encode($newUsername);
-$password = $ep->remove($_POST["password"]);
-$basePassword = base64_encode($password);
-$query = $db->prepare("SELECT email FROM accounts WHERE username = :username LIMIT 1");
-$query->execute([':username' => $username]);
-$email = $query->fetchColumn();
-$baseEmail = base64_encode($email);
 //Checking nothing's empty
 if(isset($_POST["username"]) && isset($_POST["newUsername"]) && isset($_POST["password"])){
+	//Getting form data
+	$username = $ep->remove($_POST["username"]);
+	$baseUsername = base64_encode($username);
+	$newUsername = $ep->remove($_POST["newUsername"]);
+	$baseNewUsername = base64_encode($newUsername);
+	$password = $ep->remove($_POST["password"]);
+	$basePassword = base64_encode($password);
+	$query = $db->prepare("SELECT email FROM accounts WHERE username = :username LIMIT 1");
+	$query->execute([':username' => $username]);
+	$email = $query->fetchColumn();
+	$baseEmail = base64_encode($email);
 	//Checking pass
 	if ($generatePass->isValidUsrname($username, $password)) {
 		//Checking how many times username has been changed

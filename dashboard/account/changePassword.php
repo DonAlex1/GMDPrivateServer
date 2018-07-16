@@ -37,19 +37,19 @@ if(isset($_GET["e"]) && isset($_GET["u"]) && isset($_GET["o"]) && isset($_GET["n
 						<a class='btn btn-primary btn-block' href='".$_SERVER["REQUEST_URI"]."'>".$dl->getLocalizedString("tryAgainBTN")."</a>","account"));
 	}
 }
-//Getting form data
-$username = $ep->remove($_POST["username"]);
-$oldPassword = $_POST["oldPassword"];
-$newPassword = $_POST["newPassword"];
-$baseUsername = base64_encode($username);
-$basePassword = base64_encode($oldPassword);
-$baseNewPassword = base64_encode($newPassword);
-$query = $db->prepare("SELECT email FROM accounts WHERE username = :username LIMIT 1");	
-$query->execute([':username' => $username]);
-$email = $query->fetchColumn();
-$baseEmail = base64_encode($email);
 //Checking nothing's empty
 if(isset($_POST["username"]) && isset($_POST["newPassword"]) && isset($_POST["oldPassword"])){
+	//Getting form data
+	$username = $ep->remove($_POST["username"]);
+	$oldPassword = $_POST["oldPassword"];
+	$newPassword = $_POST["newPassword"];
+	$baseUsername = base64_encode($username);
+	$basePassword = base64_encode($oldPassword);
+	$baseNewPassword = base64_encode($newPassword);
+	$query = $db->prepare("SELECT email FROM accounts WHERE username = :username LIMIT 1");	
+	$query->execute([':username' => $username]);
+	$email = $query->fetchColumn();
+	$baseEmail = base64_encode($email);
 	//Checking pass
 	if ($generatePass->isValidUsrname($username, $oldPassword)) {
 		//Sending email

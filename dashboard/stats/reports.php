@@ -27,6 +27,7 @@ if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
 	$actualPage = 1;
 }
 $array = array();
+$reporttable = "";
 //Getting data
 $query = $db->prepare("SELECT levelID FROM reports ORDER BY levelID DESC LIMIT 10 OFFSET $page");
 $query->execute();
