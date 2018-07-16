@@ -8,7 +8,7 @@ $ep = new exploitPatch();
 $gs = new mainLib();
 //Getting data
 if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-2");
-$commentsString;
+$commentsString = "";
 $page = $ep->remove($_POST["page"]);
 $gameVersion = $ep->remove($_POST["gameVersion"]);
 $binaryVersion = $ep->remove($_POST["binaryVersion"]);
@@ -25,7 +25,7 @@ if(isset($_POST["count"]) && is_numeric($_POST["count"])){
 }
 $commentPage = $page * $count;
 //Order
-if($mode == 0){
+if(!$mode){
 	$modeColumn = "commentID";
 }else{
 	$modeColumn = "likes";

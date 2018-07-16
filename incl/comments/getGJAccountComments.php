@@ -7,12 +7,9 @@ require_once "../lib/mainLib.php";
 $ep = new exploitPatch();
 $gs = new mainLib();
 //Checking secret
-if($ep->remove($_POST["secret"]) != "Wmfd2893gb7"){
-	//Error
-	exit("#0:0:0");
-}
+if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("#0:0:0");
 //Getting post data
-$commentsString;
+$commentsString = "";
 $page = $ep->remove($_POST["page"]);
 $accountID = $ep->remove($_POST["accountID"]);
 $commentPage = $page * 10;
@@ -21,16 +18,13 @@ $query = $db->prepare("SELECT * FROM accComments WHERE accountID = :accountID OR
 $query->execute([':accountID' => $accountID]);
 $comments = $query->fetchAll();
 //Counting account comments
-if($query->rowCount() == 0){
-	//No account comments
-	exit("#0:0:0");
-}
+if(!$query->rowCount()) exit("#0:0:0");
 $query = $db->prepare("SELECT count(*) FROM accComments WHERE accountID = :accountID");
 $query->execute([':accountID' => $accountID]);
 $commentCount = $query->fetchColumn();
 //Fetching account comments
 foreach($comments as &$comment) {
-	if($comment["commentID"] != ""){
+	if($comment["commentID"]){
 		$uploadDate = $gs->convertDate(date("Y-m-d H:i:s", $comment["timestamp"]));
 		$commentsString .= "2~".$comment["comment"]."~4~".$comment["likes"]."~9~".$uploadDate."~6~".$comment["commentID"]."|";
 	}
