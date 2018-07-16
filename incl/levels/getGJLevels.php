@@ -12,10 +12,10 @@ $gs = new mainLib();
 $GJPCheck = new GJPCheck();
 //Getting data
 if($ep->remove($_POST["secret"]) != "Wmfd2893gb7") exit("-1");
-$lvlstring;
-$userstring;
-$songsstring;
-$lvlsmultistring;
+$lvlstring = "";
+$userstring = "";
+$songsstring = "";
+$lvlsmultistring = "";
 $params = array("NOT unlisted = 1");
 if(!empty($_POST["gameVersion"])){
 	$gameVersion = $ep->remove($_POST["gameVersion"]);
