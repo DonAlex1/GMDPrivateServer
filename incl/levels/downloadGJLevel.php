@@ -56,7 +56,7 @@ if(!is_numeric($levelID)){
 	$query = $db->prepare("SELECT * FROM levels WHERE levelID = :levelID");
 	$query->execute([':levelID' => $levelID]);
 	$lvls = $query->rowCount();
-	if($lvls != 0){
+	if($lvls){
 		$result = $query->fetch();
 		//Adding download
 		$query = $db->prepare("UPDATE levels SET downloads = downloads + 1 WHERE levelID = :levelID");
@@ -68,7 +68,7 @@ if(!is_numeric($levelID)){
 		$pass = $result["password"];
 		$desc = $result["levelDesc"];
 		//Checking if free copy
-		if($gs->checkModIPPermission("actionFreeCopy") == 1) $pass = "1";
+		if($gs->checkModIPPermission("actionFreeCopy")) $pass = "1";
 		$xorPass = base64_encode($xor->cipher($pass, 26364));
 		//Checking level file
 		if(file_exists("../../data/levels/$levelID")){
@@ -83,11 +83,11 @@ if(!is_numeric($levelID)){
 		}
 		$response = "1:".$result["levelID"].":2:".$result["levelName"].":3:".$desc.":4:".$levelstring.":5:".$result["levelVersion"].":6:".$result["userID"].":8:10:9:".$result["starDifficulty"].":10:".$result["downloads"].":11:1:12:".$result["audioTrack"].":13:".$result["gameVersion"].":14:".$result["likes"].":17:".$result["starDemon"].":43:".$result["starDemonDiff"].":25:".$result["starAuto"].":18:".$result["starStars"].":19:".$result["starFeatured"].":42:".$result["starEpic"].":45:".$result["objects"].":15:".$result["levelLength"].":30:".$result["original"].":31:1:28:".$uploadDate. ":29:".$updateDate. ":35:".$result["songID"].":36:".$result["extraString"].":37:".$result["coins"].":38:".$result["starCoins"].":39:".$result["requestedStars"].":46:1:47:2:48:1:40:".$result["isLDM"].":27:$xorPass";
 		//Checking if daily/weekly
-		if($daily == 1) $response .= ":41:".$feaID;
+		if($daily) $response .= ":41:".$feaID;
 		$response .= "#" . $hash->genSolo($levelstring) . "#";
 		$somestring = $result["userID"].",".$result["starStars"].",".$result["starDemon"].",".$result["levelID"].",".$result["starCoins"].",".$result["starFeatured"].",".$pass.",".$feaID;
 		$response .= $hash->genSolo2($somestring) . "#";
-		if($daily == 1){
+		if($daily){
 			$extID = $gs->getExtID($result["userID"]);
 			if(!is_numeric($extID)) $extID = 0;
 			$response .= $gs->getUserString($result["userID"]);
