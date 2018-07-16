@@ -1,5 +1,6 @@
 <?php
 //Requesting files
+include "../../config/email.php";
 include "../../incl/lib/connection.php";
 require_once "../incl/dashboardLib.php";
 require_once "../../incl/lib/mainLib.php";
@@ -25,10 +26,12 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
 	if(!$accountID) exit($dl->printLoginBoxError("Invalid accountID"));
 	//Checking if banned
 	if($gs->isBanned($accountID, "account")) exit($dl->printLoginBoxError("Account banned"));
-	//Checking if actiavted
-	$query = $db->prepare("SELECT active FROM accounts WHERE accountID = :accountID LIMIT 1");
-	$query->execute([':accountID' => $accountID]);
-	if(!$query->fetchColumn()) exit($dl->printLoginBoxError("Account has not been activated."));
+	//Checking if activated
+	if($emailEnabled){	
+		$query = $db->prepare("SELECT active FROM accounts WHERE accountID = :accountID LIMIT 1");
+		$query->execute([':accountID' => $accountID]);
+		if(!$query->fetchColumn()) exit($dl->printLoginBoxError("Account has not been activated"));
+	}
 	//Setting data
 	$_SESSION["accountID"] = $accountID;
 	header('Location: ../');

@@ -18,7 +18,7 @@ if(isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0){
 	$page = 0;
 	$actualPage = 1;
 }
-$ratetable;
+$ratetable = "";
 //Getting data
 $query = $db->prepare("SELECT * FROM rateSuggestions ORDER BY suggestionDate DESC LIMIT 10 OFFSET $page");
 $query->execute();
