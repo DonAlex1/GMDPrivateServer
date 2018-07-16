@@ -94,20 +94,20 @@ if(!empty($_POST["udid"])){
 	//Checking if is numeric
 	if(is_numeric($accountID)) exit("-1");
 }
-if(!empty($_POST["accountID"]) && $_POST["accountID"] != "0"){
+if(!empty($_POST["accountID"]) && $_POST["accountID"]){
 	$accountID = $ep->remove($_POST["accountID"]);
 	//Checking GJP
 	if(!$GJPCheck->check($gjp, $accountID)) exit("-1");
 }
 //Checking if banned
-if($gs->isBanned($userID, "upload")) exit("-1");
+if($gs->isBanned($userName, "upload")) exit("-1");
 //Getting user ID
 $userID = $gs->getUserID($accountID, $userName);
 //Uploading level
 $query = $db->prepare("INSERT INTO levels (levelName, gameVersion, binaryVersion, userName, levelDesc, levelVersion, levelLength, audioTrack, auto, password, original, twoPlayer, songID, objects, coins, requestedStars, extraString, levelString, levelInfo, uploadDate, userID, extID, updateDate, unlisted, hostname, isLDM)
 VALUES (:levelName, :gameVersion, :binaryVersion, :userName, :levelDesc, :levelVersion, :levelLength, :audioTrack, :auto, :password, :original, :twoPlayer, :songID, :objects, :coins, :requestedStars, :extraString, :levelString, :levelInfo, :uploadDate, :userID, :id, :uploadDate, :unlisted, :hostname, :ldm)");
 //Checking nothing's empty
-if($levelString != "" && $levelName != ""){
+if($levelString && $levelName){
 	//Checking if uploaded
 	$levelID = $db->prepare("SELECT levelID FROM levels WHERE levelName = :levelName AND userID = :userID LIMIT 1");
 	$levelID->execute([':levelName' => $levelName, ':userID' => $userID]);
