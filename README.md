@@ -1,7 +1,7 @@
 ## Geometry Dash Private Server
 Basically a Geometry Dash Server Emulator.
 
-Supported version of Geometry Dash: 2.113 (As of writing this [July 17, 2018]).
+Supported version of Geometry Dash: 2.113 (As of writing this [July 26, 2018]).
 
 Required version of PHP: 5.4+
 
