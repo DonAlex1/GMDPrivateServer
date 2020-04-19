@@ -5,6 +5,8 @@ Supported version of Geometry Dash: 2.113 (As of writing this [July 26, 2018]).
 
 Required version of PHP: 5.4+
 
+Required [PEAR](https://pear.php.net/).
+
 ### Setup
 1) Upload the files on a webserver.
 2) Edit [connection.php](config/connection.php) with the requeried information.
